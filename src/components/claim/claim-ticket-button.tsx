@@ -1,14 +1,34 @@
+import { motion } from 'motion/react'
 import { Flex, Image, Text, chakra } from '@chakra-ui/react'
+import {
+  claimButtonPopReducedVariants,
+  claimButtonPopVariants,
+} from '../../lib/motion-presets'
+import { useReducedMotion } from '../../lib/use-reduced-motion'
 
 const ClaimButtonRoot = chakra('button')
+const MotionBox = motion.create(Flex)
 
 interface ClaimTicketButtonProps {
   label: string
   onClick?: () => void
+  isInactive?: boolean
+  isProminent?: boolean
 }
 
-export function ClaimTicketButton({ label, onClick }: ClaimTicketButtonProps) {
+export function ClaimTicketButton({
+  label,
+  onClick,
+  isInactive = false,
+  isProminent = false,
+}: ClaimTicketButtonProps) {
+  const prefersReducedMotion = useReducedMotion()
+  const popVariants = prefersReducedMotion
+    ? claimButtonPopReducedVariants
+    : claimButtonPopVariants
+
   const handleClick = () => {
+    if (isInactive) return
     if (onClick) {
       onClick()
       return
@@ -16,7 +36,11 @@ export function ClaimTicketButton({ label, onClick }: ClaimTicketButtonProps) {
     console.log('claim ticket')
   }
 
-  return (
+  const boxShadow = isProminent
+    ? '0 4px 14px rgba(0,0,0,0.35), 0 10px 28px rgba(0,0,0,0.28)'
+    : '0 1px 1.5px rgba(0,0,0,0.08)'
+
+  const button = (
     <ClaimButtonRoot
       type="button"
       display="flex"
@@ -30,13 +54,14 @@ export function ClaimTicketButton({ label, onClick }: ClaimTicketButtonProps) {
       bg="#000000"
       color="#ffffff"
       border="none"
-      cursor="pointer"
-      boxShadow="0 1px 1.5px rgba(0,0,0,0.08)"
+      cursor={isInactive ? 'default' : 'pointer'}
+      boxShadow={boxShadow}
       onClick={handleClick}
       aria-label={label}
+      aria-disabled={isInactive}
       transition="transform 0.15s ease"
       transitionProperty="transform"
-      _active={{ transform: 'scale(0.96)' }}
+      _active={isInactive ? undefined : { transform: 'scale(0.96)' }}
     >
       <Text
         fontSize="14px"
@@ -61,5 +86,18 @@ export function ClaimTicketButton({ label, onClick }: ClaimTicketButtonProps) {
         />
       </Flex>
     </ClaimButtonRoot>
+  )
+
+  if (!isProminent) return button
+
+  return (
+    <MotionBox
+      w="full"
+      initial="initial"
+      animate="animate"
+      variants={popVariants}
+    >
+      {button}
+    </MotionBox>
   )
 }

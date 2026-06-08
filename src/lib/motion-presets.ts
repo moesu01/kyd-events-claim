@@ -86,3 +86,17 @@ export const lineupReducedRowVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.12 } },
 }
+
+export const claimButtonPopVariants: Variants = {
+  initial: { scale: 0.94, opacity: 0.88 },
+  animate: {
+    scale: 1,
+    opacity: 1,
+    transition: { type: 'spring', duration: 0.45, bounce: 0.12 },
+  },
+}
+
+export const claimButtonPopReducedVariants: Variants = {
+  initial: { opacity: 0.88 },
+  animate: { opacity: 1, transition: { duration: 0.2 } },
+}

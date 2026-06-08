@@ -1,4 +1,5 @@
 import { Image, Text, VStack } from '@chakra-ui/react'
+import { AnimatedPresencePanel } from '../ui/animated-presence-panel'
 
 interface ClaimHeroHeaderProps {
   partnerLogoUrl: string
@@ -18,17 +19,20 @@ export function ClaimHeroHeader({ partnerLogoUrl, partner, headline }: ClaimHero
         flexShrink={0}
       />
 
-      <Text
-        fontSize="28px"
-        fontWeight="700"
-        lineHeight="1.1"
-        color="#ffffff"
-        textAlign="center"
-        letterSpacing="-0.28px"
-        fontFamily="heading"
-      >
-        {headline}
-      </Text>
+      <AnimatedPresencePanel panelKey={headline} mode="wait">
+        <Text
+          fontSize="28px"
+          fontWeight="700"
+          lineHeight="1.1"
+          color="#ffffff"
+          textAlign="center"
+          letterSpacing="-0.28px"
+          fontFamily="heading"
+          textWrap="balance"
+        >
+          {headline}
+        </Text>
+      </AnimatedPresencePanel>
     </VStack>
   )
 }

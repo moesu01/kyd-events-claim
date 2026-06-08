@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { mergeClassNames } from './merge-class-names'
 
-function getModalCloseMs() {
+export function getModalCloseMs() {
   if (typeof window === 'undefined') return 150
   const raw = getComputedStyle(document.documentElement).getPropertyValue('--modal-close-dur')
   return parseFloat(raw) || 150

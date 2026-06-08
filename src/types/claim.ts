@@ -1,7 +1,10 @@
+export type ClaimStatus = 'pending' | 'claimed'
+
 export interface ClaimTicket {
   partner: string
   partnerLogoUrl: string
   headline: string
+  claimedHeadline: string
   expiresLabel: string
   posterUrl: string
   title: string
@@ -12,6 +15,7 @@ export interface ClaimTicket {
   time: string
   venue: string
   city: string
-  cta: string
+  ctaClaim: string
+  ctaViewTickets: string
   disclaimer: string
 }
