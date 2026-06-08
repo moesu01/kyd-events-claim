@@ -15,4 +15,12 @@ npm run build
 - **Event page** — browse event, select tickets, purchase CTA
 - **Claim page** — StubHub transfer claim with mock OIDC sign-in dialog
 
-Navigate between flows via the **My Tickets** header dropdown.
+Navigate between flows via the **My Tickets** header dropdown, or go directly by URL:
+
+| Route | Page |
+| --- | --- |
+| `/` | Event page |
+| `/tickets` | Ticket page |
+| `/claim` | Claim page |
+
+The venue logo in the header links back to `/`.

@@ -1,16 +1,18 @@
-import { Flex, Image } from '@chakra-ui/react'
-import { MyTicketsMenu, type MyTicketsDestination } from './my-tickets-menu'
+import { Flex, Image, chakra } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+import { routes } from '../../routes/paths'
+import { MyTicketsMenu } from './my-tickets-menu'
 
 interface AppHeaderProps {
   ticketCount?: number
   logoUrl?: string
-  onNavigate?: (destination: MyTicketsDestination) => void
 }
+
+const LogoLink = chakra(Link)
 
 export function AppHeader({
   ticketCount = 2,
   logoUrl = '/assets/venue-logo.png',
-  onNavigate,
 }: AppHeaderProps) {
   return (
     <Flex
@@ -21,16 +23,26 @@ export function AppHeader({
       justify="space-between"
       w="full"
     >
-      <Image
-        src={logoUrl}
-        alt="Venue logo"
-        w="80px"
-        h="32px"
-        objectFit="contain"
+      <LogoLink
+        to={routes.event}
+        display="flex"
+        alignItems="center"
         flexShrink={0}
-      />
+        aria-label="Back to event page"
+        transition="transform 0.15s ease"
+        transitionProperty="transform"
+        _active={{ transform: 'scale(0.96)' }}
+      >
+        <Image
+          src={logoUrl}
+          alt="Venue logo"
+          w="80px"
+          h="32px"
+          objectFit="contain"
+        />
+      </LogoLink>
 
-      <MyTicketsMenu ticketCount={ticketCount} onNavigate={onNavigate} />
+      <MyTicketsMenu ticketCount={ticketCount} />
     </Flex>
   )
 }

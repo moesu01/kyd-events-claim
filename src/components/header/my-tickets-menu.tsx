@@ -2,24 +2,24 @@ import { CaretDown } from '@phosphor-icons/react'
 import { Box, Flex, Text, chakra } from '@chakra-ui/react'
 import { Menu } from '@base-ui/react/menu'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { mergeClassNames } from '../../lib/merge-class-names'
 import { useDropdownClasses } from '../../lib/use-dropdown-classes'
-
-export type MyTicketsDestination = 'tickets' | 'claim'
+import { myTicketsRoutes, type MyTicketsRouteKey } from '../../routes/paths'
 
 interface MyTicketsMenuProps {
   ticketCount?: number
-  onNavigate?: (destination: MyTicketsDestination) => void
 }
 
 const TriggerButton = chakra('button')
 
-const menuItems: Array<{ id: MyTicketsDestination; label: string }> = [
+const menuItems: Array<{ id: MyTicketsRouteKey; label: string }> = [
   { id: 'tickets', label: 'Ticket Page' },
   { id: 'claim', label: 'Claim Page' },
 ]
 
-export function MyTicketsMenu({ ticketCount = 0, onNavigate }: MyTicketsMenuProps) {
+export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const [hasOpened, setHasOpened] = useState(false)
   const { className: dropdownClassName } = useDropdownClasses(isOpen)
@@ -28,8 +28,8 @@ export function MyTicketsMenu({ ticketCount = 0, onNavigate }: MyTicketsMenuProp
     if (isOpen) setHasOpened(true)
   }, [isOpen])
 
-  const handleNavigate = (destination: MyTicketsDestination) => {
-    onNavigate?.(destination)
+  const handleNavigate = (destination: MyTicketsRouteKey) => {
+    navigate(myTicketsRoutes[destination])
   }
 
   return (

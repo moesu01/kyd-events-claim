@@ -7,7 +7,6 @@ import { EventPoster } from '../components/event/event-poster'
 import { EventTitleBlock } from '../components/event/event-title-block'
 import { SiteFooter } from '../components/footer/site-footer'
 import { AppHeader } from '../components/header/app-header'
-import type { MyTicketsDestination } from '../components/header/my-tickets-menu'
 import { StickyPurchaseBar } from '../components/tickets/sticky-purchase-bar'
 import { TicketsSection } from '../components/tickets/tickets-section'
 import { useTicketCart } from '../context/ticket-cart-context'
@@ -16,11 +15,7 @@ import { mockEvent } from '../data/mock-event'
 import { useDocumentPageBackground } from '../lib/use-document-page-background'
 import { useImageAccentColor } from '../lib/use-image-accent-color'
 
-interface EventPageProps {
-  onNavigate?: (destination: MyTicketsDestination) => void
-}
-
-export function EventPage({ onNavigate }: EventPageProps) {
+export function EventPage() {
   const { totalTickets } = useTicketCart()
   const posterUrls = mockEvent.posterUrls ?? [mockEvent.posterUrl]
   const [activePosterIndex, setActivePosterIndex] = useState(0)
@@ -47,7 +42,7 @@ export function EventPage({ onNavigate }: EventPageProps) {
           MozOsxFontSmoothing: 'grayscale',
         }}
       >
-      <AppHeader ticketCount={totalTickets} onNavigate={onNavigate} />
+      <AppHeader ticketCount={totalTickets} />
 
       <Box as="main" w="full">
         <VStack gap={0} align="stretch" w="full" pt="8px" pb={totalTickets > 0 ? '100px' : undefined}>

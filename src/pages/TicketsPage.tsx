@@ -1,13 +1,10 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { AppHeader } from '../components/header/app-header'
-import type { MyTicketsDestination } from '../components/header/my-tickets-menu'
+import { useTicketCart } from '../context/ticket-cart-context'
 
-interface TicketsPageProps {
-  ticketCount?: number
-  onNavigate?: (destination: MyTicketsDestination) => void
-}
+export function TicketsPage() {
+  const { totalTickets } = useTicketCart()
 
-export function TicketsPage({ ticketCount = 0, onNavigate }: TicketsPageProps) {
   return (
     <Box
       color="text.primary"
@@ -16,7 +13,7 @@ export function TicketsPage({ ticketCount = 0, onNavigate }: TicketsPageProps) {
       mx="auto"
       w="full"
     >
-      <AppHeader ticketCount={ticketCount} onNavigate={onNavigate} />
+      <AppHeader ticketCount={totalTickets} />
 
       <VStack as="main" gap="8px" px="pageX" pt="24px" align="stretch">
         <Text fontSize="20px" fontWeight="700" lineHeight="1.2">
