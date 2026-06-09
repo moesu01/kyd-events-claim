@@ -1,4 +1,5 @@
 import { DialRoot } from 'dialkit'
+import { useClaimDevTools } from '../../context/claim-dev-tools-context'
 import { HOLO_DIALKIT_ENABLED } from '../../lib/holo-ticket-settings'
 import '../../styles/claim-dev-controls.css'
 import { ClaimDevControls } from './claim-dev-controls'
@@ -9,7 +10,9 @@ const DEV_DOCK_GAP_PX = 8
 const DEV_DOCK_EDGE_PX = 16
 
 export function HoloTicketDialRoot() {
-  if (!import.meta.env.DEV) return null
+  const { isVisible } = useClaimDevTools()
+
+  if (!import.meta.env.DEV || !isVisible) return null
 
   const dockRight = HOLO_DIALKIT_ENABLED
     ? DEV_DOCK_EDGE_PX + DIALKIT_COLLAPSED_SIZE_PX + DEV_DOCK_GAP_PX

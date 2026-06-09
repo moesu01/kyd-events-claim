@@ -8,6 +8,7 @@ import './styles/claim-ticket.css'
 import 'dialkit/styles.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import { TicketCartProvider } from './context/ticket-cart-context'
+import { ClaimDevToolsProvider } from './context/claim-dev-tools-context'
 import { ClaimFlowProvider } from './context/claim-flow-context'
 import { HoloTicketDialRoot } from './components/dev/holo-ticket-dial-root'
 import { system } from './theme'
@@ -19,10 +20,12 @@ createRoot(document.getElementById('root')!).render(
     <ChakraProvider value={system}>
       <TicketCartProvider>
         <ClaimFlowProvider>
-          <BrowserRouter basename={getRouterBasename()}>
-            <App />
-            <HoloTicketDialRoot />
-          </BrowserRouter>
+          <ClaimDevToolsProvider>
+            <BrowserRouter basename={getRouterBasename()}>
+              <App />
+              <HoloTicketDialRoot />
+            </BrowserRouter>
+          </ClaimDevToolsProvider>
         </ClaimFlowProvider>
       </TicketCartProvider>
     </ChakraProvider>
