@@ -32,9 +32,9 @@ export function ClaimDetailRow({ label, primaryValue, secondaryValue }: ClaimDet
         <Text
           fontSize="14px"
           fontWeight="600"
-          lineHeight="1"
+          lineHeight="1.25"
           color={claimTicketColors.valueColor}
-          truncate
+          flex="1"
           minW={0}
         >
           {primaryValue}
@@ -42,7 +42,7 @@ export function ClaimDetailRow({ label, primaryValue, secondaryValue }: ClaimDet
         <Text
           fontSize="14px"
           fontWeight="600"
-          lineHeight="1"
+          lineHeight="1.25"
           color={claimTicketColors.valueColor}
           flexShrink={0}
           whiteSpace="nowrap"

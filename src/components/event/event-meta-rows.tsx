@@ -23,20 +23,20 @@ function MetaRow({ icon, leftText, rightText }: MetaRowProps) {
       </Box>
       <Flex align="center" justify="space-between" gap="8px" flex={1} minW={0}>
         <Text
-          fontSize="12px"
+          fontSize="13px"
           fontWeight="500"
           lineHeight="1"
-          letterSpacing="-0.12px"
+          letterSpacing="-0.13px"
           color="text.primary"
           truncate
         >
           {leftText}
         </Text>
         <Text
-          fontSize="12px"
+          fontSize="13px"
           fontWeight="400"
           lineHeight="1"
-          letterSpacing="-0.12px"
+          letterSpacing="-0.13px"
           color="rgba(255,255,255,0.75)"
           flexShrink={0}
           whiteSpace="nowrap"

@@ -1,9 +1,5 @@
-import { CaretDown } from '@phosphor-icons/react'
-import { Box, Flex, Text, chakra } from '@chakra-ui/react'
-import { Select } from '@base-ui/react/select'
-import { useEffect, useState } from 'react'
-import { mergeClassNames } from '../../lib/merge-class-names'
-import { useDropdownClasses } from '../../lib/use-dropdown-classes'
+import { Minus, Plus } from '@phosphor-icons/react'
+import { Flex, Text, chakra } from '@chakra-ui/react'
 
 interface QuantitySelectorProps {
   value: number
@@ -13,7 +9,7 @@ interface QuantitySelectorProps {
   isSelected?: boolean
 }
 
-const TriggerButton = chakra('button')
+const StepperButton = chakra('button')
 
 export function QuantitySelector({
   value,
@@ -22,122 +18,90 @@ export function QuantitySelector({
   ariaLabel = 'Ticket quantity',
   isSelected = false,
 }: QuantitySelectorProps) {
-  const options = Array.from({ length: max + 1 }, (_, index) => index)
-  const [isOpen, setIsOpen] = useState(false)
-  const [hasOpened, setHasOpened] = useState(false)
-  const { className: dropdownClassName } = useDropdownClasses(isOpen)
+  const isAtMin = value <= 0
+  const isAtMax = value >= max
 
-  useEffect(() => {
-    if (isOpen) setHasOpened(true)
-  }, [isOpen])
+  const handleDecrement = () => {
+    if (isAtMin) return
+    onChange(value - 1)
+  }
+
+  const handleIncrement = () => {
+    if (isAtMax) return
+    onChange(value + 1)
+  }
 
   return (
-    <Select.Root
-      value={value}
-      onValueChange={(nextValue) => onChange(Number(nextValue))}
-      open={isOpen}
-      onOpenChange={setIsOpen}
+    <Flex
+      align="center"
+      gap="2px"
+      bg={isSelected ? 'oklch(0.28 0 0)' : 'bg.surface'}
+      borderRadius="8px"
+      px="4px"
+      py="4px"
+      flexShrink={0}
+      role="group"
+      aria-label={ariaLabel}
     >
-      <Flex
-        align="center"
-        gap="6px"
-        bg={isSelected ? 'oklch(0.28 0 0)' : 'bg.surface'}
-        borderRadius="8px"
-        px="12px"
-        py="10px"
-        flexShrink={0}
+      <StepperButton
+        type="button"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        w="36px"
+        h="36px"
+        borderRadius="6px"
+        bg="transparent"
+        border="none"
+        color="text.primary"
+        cursor={isAtMin ? 'not-allowed' : 'pointer'}
+        opacity={isAtMin ? 0.4 : 1}
+        disabled={isAtMin}
+        onClick={handleDecrement}
+        aria-label="Decrease quantity"
+        transition="transform 0.15s ease"
+        transitionProperty="transform"
+        _active={isAtMin ? undefined : { transform: 'scale(0.96)' }}
       >
-        <Select.Trigger
-          render={(props) => (
-            <TriggerButton
-              {...props}
-              type="button"
-              display="flex"
-              alignItems="center"
-              gap="6px"
-              bg="transparent"
-              border="none"
-              p={0}
-              cursor="pointer"
-              color="text.primary"
-              aria-label={ariaLabel}
-              transition="transform 0.15s ease"
-              transitionProperty="transform"
-              _active={{ transform: 'scale(0.96)' }}
-            >
-              <Text
-                fontSize="20px"
-                fontWeight="700"
-                lineHeight="24px"
-                fontVariantNumeric="tabular-nums"
-              >
-                {value}
-              </Text>
-              <Box pointerEvents="none" flexShrink={0} color="text.primary">
-                <CaretDown size={10} weight="bold" aria-hidden />
-              </Box>
-            </TriggerButton>
-          )}
-        />
-      </Flex>
+        <Minus size={14} weight="bold" aria-hidden />
+      </StepperButton>
 
-      {hasOpened ? (
-        <Select.Portal>
-          <Select.Positioner side="bottom" align="center" sideOffset={4}>
-            <Select.Popup
-              data-origin="bottom-center"
-              render={(props) => (
-                <div
-                  {...props}
-                  className={mergeClassNames(dropdownClassName, props.className)}
-                  style={{
-                    background: '#0a1219',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    paddingBlock: '4px',
-                    minWidth: '56px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-                    zIndex: 50,
-                    ...props.style,
-                  }}
-                />
-              )}
-            >
-              <Select.List>
-                {options.map((qty) => (
-                  <Select.Item
-                    key={qty}
-                    value={qty}
-                    render={(props, state) => (
-                      <button
-                        {...props}
-                        type="button"
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '8px 12px',
-                          background: state.selected
-                            ? 'rgba(255,255,255,0.05)'
-                            : 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          color: '#fff',
-                          fontSize: '16px',
-                          fontWeight: 700,
-                          fontVariantNumeric: 'tabular-nums',
-                          textAlign: 'center',
-                        }}
-                      >
-                        <Select.ItemText>{qty}</Select.ItemText>
-                      </button>
-                    )}
-                  />
-                ))}
-              </Select.List>
-            </Select.Popup>
-          </Select.Positioner>
-        </Select.Portal>
-      ) : null}
-    </Select.Root>
+      <Text
+        fontSize="20px"
+        fontWeight="700"
+        lineHeight="24px"
+        fontVariantNumeric="tabular-nums"
+        color="text.primary"
+        minW="24px"
+        textAlign="center"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {value}
+      </Text>
+
+      <StepperButton
+        type="button"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        w="36px"
+        h="36px"
+        borderRadius="6px"
+        bg="transparent"
+        border="none"
+        color="text.primary"
+        cursor={isAtMax ? 'not-allowed' : 'pointer'}
+        opacity={isAtMax ? 0.4 : 1}
+        disabled={isAtMax}
+        onClick={handleIncrement}
+        aria-label="Increase quantity"
+        transition="transform 0.15s ease"
+        transitionProperty="transform"
+        _active={isAtMax ? undefined : { transform: 'scale(0.96)' }}
+      >
+        <Plus size={14} weight="bold" aria-hidden />
+      </StepperButton>
+    </Flex>
   )
 }
