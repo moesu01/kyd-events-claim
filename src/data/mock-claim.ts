@@ -1,12 +1,13 @@
+import { assetUrl } from '../lib/asset-url'
 import type { ClaimTicket } from '../types/claim'
 
 export const mockClaim: ClaimTicket = {
   partner: 'StubHub',
-  partnerLogoUrl: '/assets/claim/stubhub-logo.png',
+  partnerLogoUrl: assetUrl('/assets/claim/stubhub-logo.png'),
   headline: "You've Got Tickets!",
   claimedHeadline: 'Ticket claimed!',
   expiresLabel: 'Expires in 47hrs 32min',
-  posterUrl: '/assets/claim/kels-in-the-round.png',
+  posterUrl: assetUrl('/assets/claim/kels-in-the-round.png'),
   title: 'KELS - In The Round',
   eventTitle: 'KELS - In The Round',
   ticketType: 'In The Round',

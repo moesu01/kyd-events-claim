@@ -1,5 +1,6 @@
 import { Flex, Image, chakra } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+import { assetUrl } from '../../lib/asset-url'
 import { routes } from '../../routes/paths'
 import { MyTicketsMenu } from './my-tickets-menu'
 
@@ -12,7 +13,7 @@ const LogoLink = chakra(Link)
 
 export function AppHeader({
   ticketCount = 2,
-  logoUrl = '/assets/venue-logo.png',
+  logoUrl = assetUrl('/assets/venue-logo.png'),
 }: AppHeaderProps) {
   return (
     <Flex

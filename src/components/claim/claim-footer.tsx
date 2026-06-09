@@ -1,8 +1,9 @@
 import { Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { useState } from 'react'
+import { assetUrl } from '../../lib/asset-url'
 
-const TIX_LOGO_URL = '/assets/claim/tix-logo.svg'
-const TIX_LOGO_FALLBACK_URL = '/assets/claim/tix-logo.png'
+const TIX_LOGO_URL = assetUrl('/assets/claim/tix-logo.svg')
+const TIX_LOGO_FALLBACK_URL = assetUrl('/assets/claim/tix-logo.png')
 
 export function ClaimFooter() {
   const [logoUrl, setLogoUrl] = useState(TIX_LOGO_URL)

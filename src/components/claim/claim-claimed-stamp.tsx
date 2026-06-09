@@ -1,9 +1,10 @@
 import { Box, Image } from '@chakra-ui/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { assetUrl } from '../../lib/asset-url'
 import { mergeClassNames } from '../../lib/merge-class-names'
 import { useReducedMotion } from '../../lib/use-reduced-motion'
 
-const CLAIMED_STAMP_URL = '/assets/claim/claimed-stamp.png'
+const CLAIMED_STAMP_URL = assetUrl('/assets/claim/claimed-stamp.png')
 
 interface ClaimClaimedStampProps {
   isClaimed: boolean

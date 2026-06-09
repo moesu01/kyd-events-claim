@@ -16,7 +16,9 @@ export function ClaimClaimedSubtext() {
       w="fit-content"
       mx="auto"
     >
-      <CheckCircle size={18} weight="fill" color="#4ade80" aria-hidden flexShrink={0} />
+      <Flex flexShrink={0} align="center">
+        <CheckCircle size={18} weight="fill" color="#4ade80" aria-hidden />
+      </Flex>
       <Text fontSize="14px" fontWeight="500" lineHeight="1" color="#ffffff" textWrap="balance">
         Tap your ticket to view it on KYD Labs
       </Text>

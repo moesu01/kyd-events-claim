@@ -12,13 +12,14 @@ import { ClaimFlowProvider } from './context/claim-flow-context'
 import { HoloTicketDialRoot } from './components/dev/holo-ticket-dial-root'
 import { system } from './theme'
 import App from './App.tsx'
+import { getRouterBasename } from './lib/router-basename'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChakraProvider value={system}>
       <TicketCartProvider>
         <ClaimFlowProvider>
-          <BrowserRouter>
+          <BrowserRouter basename={getRouterBasename()}>
             <App />
             <HoloTicketDialRoot />
           </BrowserRouter>

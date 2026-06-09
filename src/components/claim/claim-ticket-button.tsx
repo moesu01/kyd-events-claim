@@ -4,6 +4,7 @@ import {
   claimButtonPopReducedVariants,
   claimButtonPopVariants,
 } from '../../lib/motion-presets'
+import { assetUrl } from '../../lib/asset-url'
 import { useReducedMotion } from '../../lib/use-reduced-motion'
 
 const ClaimButtonRoot = chakra('button')
@@ -71,7 +72,7 @@ export function ClaimTicketButton({
       </Text>
       <Flex align="center" justify="center" flexShrink={0} w="25px" h="14px" pointerEvents="none">
         <Image
-          src="/assets/claim/claim-transfer-icon.svg"
+          src={assetUrl('/assets/claim/claim-transfer-icon.svg')}
           alt=""
           w="full"
           h="full"

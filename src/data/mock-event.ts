@@ -1,3 +1,4 @@
+import { assetUrl } from '../lib/asset-url'
 import type { Event } from '../types/event'
 
 export const mockEvent: Event = {
@@ -5,11 +6,11 @@ export const mockEvent: Event = {
   title: 'Season of What',
   subtitle: 'An Evening of Acoustic Dead',
   presenter: 'Presented by High Times',
-  posterUrl: '/assets/poster.jpg',
+  posterUrl: assetUrl('/assets/poster.jpg'),
   posterUrls: [
-    '/assets/poster.jpg',
-    '/assets/poster-jams.png',
-    '/assets/poster-labiahead.png',
+    assetUrl('/assets/poster.jpg'),
+    assetUrl('/assets/poster-jams.png'),
+    assetUrl('/assets/poster-labiahead.png'),
   ],
   date: 'Tuesday, June 7',
   timeRange: '6:30PM - 9:30PM',
@@ -63,7 +64,7 @@ export const mockEvent: Event = {
     {
       id: 'honey-revenge',
       name: 'Honey Revenge',
-      imageUrl: '/assets/artists/honey-revenge.jpg',
+      imageUrl: assetUrl('/assets/artists/honey-revenge.jpg'),
       setTime: '10:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -74,7 +75,7 @@ export const mockEvent: Event = {
     {
       id: 'daisy-grenade',
       name: 'Daisy Grenade',
-      imageUrl: '/assets/artists/daisy-grenade.jpg',
+      imageUrl: assetUrl('/assets/artists/daisy-grenade.jpg'),
       setTime: '9:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -85,7 +86,7 @@ export const mockEvent: Event = {
     {
       id: 'vana',
       name: 'Vana',
-      imageUrl: '/assets/artists/vana.jpg',
+      imageUrl: assetUrl('/assets/artists/vana.jpg'),
       setTime: '8:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -96,7 +97,7 @@ export const mockEvent: Event = {
     {
       id: 'nightlife',
       name: 'nightlife',
-      imageUrl: '/assets/artists/nightlife.jpg',
+      imageUrl: assetUrl('/assets/artists/nightlife.jpg'),
       setTime: '7:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -107,7 +108,7 @@ export const mockEvent: Event = {
     {
       id: 'laser-girl-420',
       name: 'Laser girl 420',
-      imageUrl: '/assets/artists/laser-girl-420.jpg',
+      imageUrl: assetUrl('/assets/artists/laser-girl-420.jpg'),
       setTime: '11:00PM',
       socials: {
         instagram: 'https://instagram.com',

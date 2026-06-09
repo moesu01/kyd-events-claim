@@ -1,5 +1,6 @@
 import { HStack, Image, Text, VStack, chakra } from '@chakra-ui/react'
 import { useState } from 'react'
+import { assetUrl } from '../../lib/asset-url'
 
 const FooterLink = chakra('a')
 
@@ -17,7 +18,7 @@ const FOOTER_LINKS = [
 
 export function SiteFooter({
   version = 'v2.0.6',
-  logoUrl = '/assets/kyd-labs-logo.png',
+  logoUrl = assetUrl('/assets/kyd-labs-logo.png'),
 }: SiteFooterProps) {
   const [hasLogoError, setHasLogoError] = useState(false)
 

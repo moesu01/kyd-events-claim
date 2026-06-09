@@ -7,12 +7,13 @@ import { mergeClassNames } from '../../lib/merge-class-names'
 import { useModalClasses, getModalCloseMs } from '../../lib/use-modal-classes'
 import type { ClaimTicket } from '../../types/claim'
 import { ClaimAuthField } from './claim-auth-field'
+import { assetUrl } from '../../lib/asset-url'
 import { ClaimOtpInput } from './claim-otp-input'
 
 const ContinueButton = chakra('button')
 const CancelButton = chakra('button')
 
-const LOGO_URL = '/assets/kyd-logo-white.png'
+const LOGO_URL = assetUrl('/assets/kyd-logo-white.png')
 const MOCK_AUTH_DELAY_MS = 600
 
 type AuthStep = 'phone' | 'code'
