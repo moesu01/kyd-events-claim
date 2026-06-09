@@ -1,9 +1,11 @@
 import { Box, Image, Text, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
+import { useCallback, useEffect, useState } from 'react'
 import type { ClaimStatus, ClaimTicket } from '../../types/claim'
+import { useEventAccent } from '../../context/event-accent-context'
 import { useReducedMotion } from '../../lib/use-reduced-motion'
+import { ClaimClaimedStamp } from './claim-claimed-stamp'
 import { ClaimDetailRow } from './claim-detail-row'
-import { ClaimDisclaimer } from './claim-disclaimer'
 import { ClaimTicketButton } from './claim-ticket-button'
 import { HolographicSurface } from './holographic-surface'
 import { HolographicTicketShell } from './holographic-ticket-shell'
@@ -11,30 +13,47 @@ import { HolographicTicketShell } from './holographic-ticket-shell'
 interface ClaimTicketCardProps {
   claim: ClaimTicket
   claimStatus: ClaimStatus
+  claimAnimationsReady?: boolean
   onClaim: () => void
 }
 
-const ticketBorderColor = 'rgba(66,62,0,0.15)'
-const ticketSurfaceBg = '#f0f0f0'
-
 const MotionBox = motion.create(Box)
 
-export function ClaimTicketCard({ claim, claimStatus, onClaim }: ClaimTicketCardProps) {
+export function ClaimTicketCard({
+  claim,
+  claimStatus,
+  claimAnimationsReady = false,
+  onClaim,
+}: ClaimTicketCardProps) {
   const prefersReducedMotion = useReducedMotion()
+  const { claimTicketColors } = useEventAccent()
   const quantityLabel = `${claim.quantity}x`
   const isClaimed = claimStatus === 'claimed'
+  const [isHoloActivated, setIsHoloActivated] = useState(false)
   const ctaLabel = isClaimed ? claim.ctaViewTickets : claim.ctaClaim
 
+  useEffect(() => {
+    if (!isClaimed) setIsHoloActivated(false)
+  }, [isClaimed])
+
+  const handleStampComplete = useCallback(() => {
+    setIsHoloActivated(true)
+  }, [])
+
   return (
-    <Box w="full" maxW="330px" mx="auto">
-      <HolographicTicketShell>
-        <HolographicSurface variant="topBody">
+    <Box w="full" maxW="330px" mx="auto" position="relative" overflow="visible">
+      <HolographicTicketShell
+        isHoloActive={isClaimed}
+        isGlowActive={isHoloActivated}
+        isTicketLink={isClaimed}
+      >
+        <HolographicSurface variant="topBody" showFoil={isClaimed} isClaimedGlow={isHoloActivated}>
           <Box
             position="relative"
-            bg={ticketSurfaceBg}
+            bg={claimTicketColors.surfaceBg}
             borderWidth="1px"
             borderStyle="solid"
-            borderColor={ticketBorderColor}
+            borderColor={claimTicketColors.borderColor}
             borderBottom="none"
             borderTopRadius="8px"
             borderBottomRadius="16px"
@@ -57,21 +76,31 @@ export function ClaimTicketCard({ claim, claimStatus, onClaim }: ClaimTicketCard
                     w="full"
                     h="full"
                     objectFit="cover"
+                    objectPosition="center"
                     draggable={false}
+                    pointerEvents="none"
                   />
                 </Box>
 
                 <VStack gap="12px" align="stretch" w="full">
-                  <Text
-                    fontSize="16px"
-                    fontWeight="700"
-                    lineHeight="1.3"
-                    color="#423e00"
-                    textTransform="capitalize"
-                    textWrap="balance"
-                  >
-                    {claim.title}
-                  </Text>
+                  <Box position="relative" w="full">
+                    <Text
+                      fontSize="16px"
+                      fontWeight="700"
+                      lineHeight="1.3"
+                      color={claimTicketColors.titleColor}
+                      textWrap="balance"
+                      pointerEvents="none"
+                    >
+                      {claim.title}
+                    </Text>
+
+                    <ClaimClaimedStamp
+                      isClaimed={isClaimed}
+                      isReady={claimAnimationsReady}
+                      onStampComplete={handleStampComplete}
+                    />
+                  </Box>
 
                   <VStack gap="12px" align="stretch" w="full">
                     <ClaimDetailRow
@@ -96,13 +125,13 @@ export function ClaimTicketCard({ claim, claimStatus, onClaim }: ClaimTicketCard
           </Box>
         </HolographicSurface>
 
-        <HolographicSurface variant="bottomStub">
+        <HolographicSurface variant="bottomStub" isClaimedGlow={isHoloActivated}>
           <Box
             position="relative"
-            bg={ticketSurfaceBg}
+            bg={claimTicketColors.surfaceBg}
             borderWidth="1px"
             borderStyle="solid"
-            borderColor={ticketBorderColor}
+            borderColor={claimTicketColors.borderColor}
             borderTopRadius="16px"
             borderBottomRadius="2px"
             overflow="hidden"
@@ -119,8 +148,8 @@ export function ClaimTicketCard({ claim, claimStatus, onClaim }: ClaimTicketCard
                   <ClaimTicketButton
                     label={ctaLabel}
                     onClick={isClaimed ? undefined : onClaim}
-                    isInactive={isClaimed}
-                    isProminent={isClaimed}
+                    displayOnly={isClaimed}
+                    isProminent={isHoloActivated}
                   />
                 </MotionBox>
               </AnimatePresence>
@@ -129,7 +158,15 @@ export function ClaimTicketCard({ claim, claimStatus, onClaim }: ClaimTicketCard
         </HolographicSurface>
       </HolographicTicketShell>
 
-      {!isClaimed ? <ClaimDisclaimer text={claim.disclaimer} /> : null}
+      {isClaimed ? (
+        <a
+          href={claim.viewTicketsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="claim-ticket-hit-layer"
+          aria-label={ctaLabel}
+        />
+      ) : null}
     </Box>
   )
 }

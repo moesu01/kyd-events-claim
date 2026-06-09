@@ -17,5 +17,6 @@ export interface ClaimTicket {
   city: string
   ctaClaim: string
   ctaViewTickets: string
+  viewTicketsUrl: string
   disclaimer: string
 }

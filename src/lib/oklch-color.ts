@@ -111,6 +111,77 @@ export function getAccentMutedTextColorLight(accentColor: string): string {
   return formatOklch({ l: 0.869, c: 0.019, h: hue })
 }
 
+const CLAIM_INK = rgbToOklch({ r: 66, g: 62, b: 0 })
+const CLAIM_SURFACE = rgbToOklch({ r: 240, g: 240, b: 240 })
+
+function getAccentHue(accentColor: string): number {
+  return parseOklch(accentColor)?.h ?? CLAIM_INK.h
+}
+
+function retintClaimColor(accentColor: string, alpha?: number): string {
+  const tinted = { l: CLAIM_INK.l, c: CLAIM_INK.c, h: getAccentHue(accentColor) }
+
+  if (alpha === undefined) return formatOklch(tinted)
+
+  return formatOklchWithAlpha(tinted, alpha)
+}
+
+export interface ClaimTicketColors {
+  titleColor: string
+  labelColor: string
+  valueColor: string
+  borderColor: string
+  surfaceBg: string
+}
+
+export function getClaimTicketColors(accentColor: string): ClaimTicketColors {
+  const surfaceChroma = Math.max(CLAIM_SURFACE.c, 0.012)
+
+  return {
+    titleColor: retintClaimColor(accentColor),
+    labelColor: retintClaimColor(accentColor, 0.75),
+    valueColor: retintClaimColor(accentColor, 0.9),
+    borderColor: retintClaimColor(accentColor, 0.15),
+    surfaceBg: formatOklch({
+      l: CLAIM_SURFACE.l,
+      c: surfaceChroma,
+      h: getAccentHue(accentColor),
+    }),
+  }
+}
+
+export interface ClaimedGlowAlphas {
+  greenAlpha: number
+  blueAlpha: number
+  yellowAlpha: number
+  softAlpha: number
+}
+
+export function buildClaimedGlowAccentCssVars(
+  accentColor: string,
+  alphas: ClaimedGlowAlphas,
+): Record<string, string> {
+  const accent = parseOklch(accentColor)
+  const hue = accent?.h ?? 268
+  const chromaBase = Math.min(Math.max(accent?.c ?? 0.09, 0.06), 0.18)
+
+  return {
+    '--claimed-glow-green': formatOklchWithAlpha(
+      { l: 0.62, c: chromaBase * 1.15, h: hue },
+      alphas.greenAlpha,
+    ),
+    '--claimed-glow-blue': formatOklchWithAlpha({ l: 0.55, c: chromaBase, h: hue }, alphas.blueAlpha),
+    '--claimed-glow-yellow': formatOklchWithAlpha(
+      { l: 0.72, c: chromaBase * 0.85, h: hue },
+      alphas.yellowAlpha,
+    ),
+    '--claimed-glow-soft': formatOklchWithAlpha(
+      { l: 0.88, c: chromaBase * 0.55, h: hue },
+      alphas.softAlpha,
+    ),
+  }
+}
+
 function clampChromaForLightness(chroma: number, lightness: number): number {
   const maxChroma = 0.04 + (0.5 - Math.abs(lightness - 0.5)) * 0.22
   return Math.min(chroma, maxChroma)

@@ -11,6 +11,16 @@ const HoloTicketSettingsContext = createContext<HoloTicketSettings>(DEFAULT_HOLO
 
 function useHoloTicketDialKit() {
   return useDialKit('Holo Ticket', {
+    claimedGlow: {
+      glowInner: [0, 0, 120, 1],
+      glowMid: [2, 0, 160, 1],
+      glowOuter: [14, 0, 200, 1],
+      glowFar: [27, 0, 240, 1],
+      greenAlpha: [0, 0, 1, 0.01],
+      blueAlpha: [0.27, 0, 1, 0.01],
+      yellowAlpha: [0.31, 0, 1, 0.01],
+      softAlpha: [0.19, 0, 1, 0.01],
+    },
     enabled: true,
     foil: {
       preset: {
@@ -64,6 +74,16 @@ export function HoloTicketSettingsProvider({ children }: HoloTicketSettingsProvi
   const settings = useMemo<HoloTicketSettings>(
     () => ({
       enabled: dial.enabled,
+      claimedGlow: {
+        glowInner: dial.claimedGlow.glowInner,
+        glowMid: dial.claimedGlow.glowMid,
+        glowOuter: dial.claimedGlow.glowOuter,
+        glowFar: dial.claimedGlow.glowFar,
+        greenAlpha: dial.claimedGlow.greenAlpha,
+        blueAlpha: dial.claimedGlow.blueAlpha,
+        yellowAlpha: dial.claimedGlow.yellowAlpha,
+        softAlpha: dial.claimedGlow.softAlpha,
+      },
       foil: {
         preset: dial.foil.preset as HoloFoilPreset,
         idleOpacity: dial.foil.idleOpacity,

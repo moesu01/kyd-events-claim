@@ -1,0 +1,53 @@
+.claim-dev-dock {
+  position: fixed;
+  bottom: 16px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.claim-dev-control {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: var(--dial-text-primary, rgba(255, 255, 255, 0.95));
+  background: var(--dial-glass-bg, #212121);
+  border: 1px solid var(--dial-border, rgba(255, 255, 255, 0.1));
+  box-shadow: var(--dial-shadow-collapsed, 0 4px 16px rgba(0, 0, 0, 0.25));
+  backdrop-filter: blur(var(--dial-backdrop-blur, 20px));
+  -webkit-backdrop-filter: blur(var(--dial-backdrop-blur, 20px));
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease,
+    opacity 150ms ease;
+}
+
+.claim-dev-control:hover:not(:disabled) {
+  background: var(--dial-surface-hover, rgba(255, 255, 255, 0.1));
+  border-color: var(--dial-border-hover, rgba(255, 255, 255, 0.15));
+}
+
+.claim-dev-control:active:not(:disabled) {
+  transform: scale(0.96);
+  background: var(--dial-surface-active, rgba(255, 255, 255, 0.11));
+}
+
+.claim-dev-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.claim-dev-control:focus-visible {
+  outline: 2px solid var(--dial-text-focus, #ffffff);
+  outline-offset: 2px;
+}

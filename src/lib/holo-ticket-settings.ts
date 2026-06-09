@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import type { ClaimedGlowAlphas } from './oklch-color'
 
 export type HoloFoilPreset =
   | 'ticket'
@@ -67,14 +68,32 @@ export interface HoloTicketInteractiveSettings {
   idleFloat: boolean
 }
 
+export interface HoloTicketClaimedGlowSettings extends ClaimedGlowAlphas {
+  glowInner: number
+  glowMid: number
+  glowOuter: number
+  glowFar: number
+}
+
 export interface HoloTicketSettings {
   enabled: boolean
+  claimedGlow: HoloTicketClaimedGlowSettings
   foil: HoloTicketFoilSettings
   interactive3d: HoloTicketInteractiveSettings
 }
 
 export const DEFAULT_HOLO_TICKET_SETTINGS: HoloTicketSettings = {
   enabled: true,
+  claimedGlow: {
+    glowInner: 0,
+    glowMid: 2,
+    glowOuter: 14,
+    glowFar: 27,
+    greenAlpha: 0,
+    blueAlpha: 0.27,
+    yellowAlpha: 0.31,
+    softAlpha: 0.19,
+  },
   foil: {
     preset: 'cosmosHolo',
     idleOpacity: 0.63,
@@ -113,9 +132,13 @@ export const DEFAULT_HOLO_TICKET_SETTINGS: HoloTicketSettings = {
 }
 
 export function buildHoloTicketCssVars(settings: HoloTicketSettings): CSSProperties {
-  const { foil, interactive3d } = settings
+  const { claimedGlow, foil, interactive3d } = settings
 
   return {
+    '--claimed-glow-inner': `${claimedGlow.glowInner}px`,
+    '--claimed-glow-mid': `${claimedGlow.glowMid}px`,
+    '--claimed-glow-outer': `${claimedGlow.glowOuter}px`,
+    '--claimed-glow-far': `${claimedGlow.glowFar}px`,
     '--holo-perspective': `${interactive3d.perspective}px`,
     '--holo-max-tilt': `${interactive3d.maxTilt}deg`,
     '--holo-idle-opacity': `${foil.idleOpacity}`,

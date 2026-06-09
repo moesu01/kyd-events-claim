@@ -7,6 +7,7 @@ import {
 import { useReducedMotion } from '../../lib/use-reduced-motion'
 
 const ClaimButtonRoot = chakra('button')
+const ClaimCtaFace = chakra('div')
 const MotionBox = motion.create(Flex)
 
 interface ClaimTicketButtonProps {
@@ -14,55 +15,49 @@ interface ClaimTicketButtonProps {
   onClick?: () => void
   isInactive?: boolean
   isProminent?: boolean
+  displayOnly?: boolean
 }
+
+const faceStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  w: 'full',
+  py: '10px',
+  pl: '16px',
+  pr: '14px',
+  borderRadius: '8px',
+  bg: '#000000',
+  color: '#ffffff',
+  border: 'none',
+  textDecoration: 'none',
+  transition: 'transform 0.15s ease',
+  transitionProperty: 'transform',
+} as const
 
 export function ClaimTicketButton({
   label,
   onClick,
   isInactive = false,
   isProminent = false,
+  displayOnly = false,
 }: ClaimTicketButtonProps) {
   const prefersReducedMotion = useReducedMotion()
   const popVariants = prefersReducedMotion
     ? claimButtonPopReducedVariants
     : claimButtonPopVariants
 
-  const handleClick = () => {
-    if (isInactive) return
-    if (onClick) {
-      onClick()
-      return
-    }
-    console.log('claim ticket')
+  const handleButtonClick = () => {
+    if (isInactive || displayOnly) return
+    if (onClick) onClick()
   }
 
   const boxShadow = isProminent
     ? '0 4px 14px rgba(0,0,0,0.35), 0 10px 28px rgba(0,0,0,0.28)'
     : '0 1px 1.5px rgba(0,0,0,0.08)'
 
-  const button = (
-    <ClaimButtonRoot
-      type="button"
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      w="full"
-      py="10px"
-      pl="16px"
-      pr="14px"
-      borderRadius="8px"
-      bg="#000000"
-      color="#ffffff"
-      border="none"
-      cursor={isInactive ? 'default' : 'pointer'}
-      boxShadow={boxShadow}
-      onClick={handleClick}
-      aria-label={label}
-      aria-disabled={isInactive}
-      transition="transform 0.15s ease"
-      transitionProperty="transform"
-      _active={isInactive ? undefined : { transform: 'scale(0.96)' }}
-    >
+  const labelContent = (
+    <>
       <Text
         fontSize="14px"
         fontWeight="600"
@@ -70,10 +65,11 @@ export function ClaimTicketButton({
         color="#ffffff"
         letterSpacing="-0.14px"
         whiteSpace="nowrap"
+        pointerEvents="none"
       >
         {label}
       </Text>
-      <Flex align="center" justify="center" flexShrink={0} w="25px" h="14px">
+      <Flex align="center" justify="center" flexShrink={0} w="25px" h="14px" pointerEvents="none">
         <Image
           src="/assets/claim/claim-transfer-icon.svg"
           alt=""
@@ -85,10 +81,29 @@ export function ClaimTicketButton({
           aria-hidden
         />
       </Flex>
+    </>
+  )
+
+  const control = displayOnly ? (
+    <ClaimCtaFace aria-hidden boxShadow={boxShadow} {...faceStyles}>
+      {labelContent}
+    </ClaimCtaFace>
+  ) : (
+    <ClaimButtonRoot
+      type="button"
+      aria-label={label}
+      aria-disabled={isInactive}
+      boxShadow={boxShadow}
+      cursor={isInactive ? 'default' : 'pointer'}
+      onClick={handleButtonClick}
+      _active={isInactive ? undefined : { transform: 'scale(0.96)' }}
+      {...faceStyles}
+    >
+      {labelContent}
     </ClaimButtonRoot>
   )
 
-  if (!isProminent) return button
+  if (!isProminent) return control
 
   return (
     <MotionBox
@@ -97,7 +112,7 @@ export function ClaimTicketButton({
       animate="animate"
       variants={popVariants}
     >
-      {button}
+      {control}
     </MotionBox>
   )
 }

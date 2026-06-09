@@ -12,6 +12,10 @@ interface ClaimFlowContextValue {
   claimStatus: ClaimStatus
   completeClaim: () => void
   resetClaim: () => void
+  resetToken: number
+  replayToken: number
+  requestClaimFlowReset: () => void
+  requestClaimAnimationReplay: () => void
 }
 
 const ClaimFlowContext = createContext<ClaimFlowContextValue | null>(null)
@@ -22,6 +26,8 @@ interface ClaimFlowProviderProps {
 
 export function ClaimFlowProvider({ children }: ClaimFlowProviderProps) {
   const [claimStatus, setClaimStatus] = useState<ClaimStatus>('pending')
+  const [resetToken, setResetToken] = useState(0)
+  const [replayToken, setReplayToken] = useState(0)
 
   const completeClaim = useCallback(() => {
     setClaimStatus('claimed')
@@ -31,13 +37,34 @@ export function ClaimFlowProvider({ children }: ClaimFlowProviderProps) {
     setClaimStatus('pending')
   }, [])
 
+  const requestClaimFlowReset = useCallback(() => {
+    setClaimStatus('pending')
+    setResetToken((token) => token + 1)
+  }, [])
+
+  const requestClaimAnimationReplay = useCallback(() => {
+    setReplayToken((token) => token + 1)
+  }, [])
+
   const value = useMemo(
     () => ({
       claimStatus,
       completeClaim,
       resetClaim,
+      resetToken,
+      replayToken,
+      requestClaimFlowReset,
+      requestClaimAnimationReplay,
     }),
-    [claimStatus, completeClaim, resetClaim],
+    [
+      claimStatus,
+      completeClaim,
+      resetClaim,
+      resetToken,
+      replayToken,
+      requestClaimFlowReset,
+      requestClaimAnimationReplay,
+    ],
   )
 
   return <ClaimFlowContext.Provider value={value}>{children}</ClaimFlowContext.Provider>

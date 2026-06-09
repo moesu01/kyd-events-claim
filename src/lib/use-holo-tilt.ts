@@ -93,7 +93,17 @@ function toCssVars(update: PendingUpdate): HoloTiltVars {
   }
 }
 
-export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
+interface UseHoloTiltOptions {
+  interactive?: boolean
+  active?: boolean
+}
+
+export function useHoloTilt(
+  ref: RefObject<HTMLElement | null>,
+  options: UseHoloTiltOptions = {},
+) {
+  const interactive = options.interactive ?? true
+  const active = options.active ?? true
   const settings = useHoloTicketSettings()
   const prefersReducedMotion = useReducedMotion()
   const [cssVars, setCssVars] = useState<HoloTiltVars>(STATIC_VARS)
@@ -101,7 +111,9 @@ export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
   const rafIdRef = useRef<number | null>(null)
   const pendingRef = useRef<PendingUpdate | null>(null)
 
-  const isEffectEnabled = settings.enabled && !prefersReducedMotion
+  const holoActive = active && settings.enabled && !prefersReducedMotion
+  const pointerActive = interactive && holoActive
+  const idleFloatActive = holoActive && settings.interactive3d.idleFloat
 
   const getIdleVars = useCallback((): PendingUpdate => {
     return {
@@ -206,22 +218,22 @@ export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
   const handlePointerMove = useCallback(
     (event: PointerEvent) => {
       const element = ref.current
-      if (!element || !isEffectEnabled) return
+      if (!element || !pointerActive) return
 
       setIsInteracting(true)
       const rect = element.getBoundingClientRect()
       scheduleUpdate(computeInteraction(event.clientX, event.clientY, rect))
     },
-    [computeInteraction, isEffectEnabled, ref, scheduleUpdate],
+    [computeInteraction, pointerActive, ref, scheduleUpdate],
   )
 
   const handlePointerDown = useCallback(
     (event: PointerEvent) => {
-      if (!isEffectEnabled) return
+      if (!pointerActive) return
       setIsInteracting(true)
       handlePointerMove(event)
     },
-    [handlePointerMove, isEffectEnabled],
+    [handlePointerMove, pointerActive],
   )
 
   const handlePointerUp = useCallback(() => {
@@ -234,11 +246,22 @@ export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
 
   useEffect(() => {
     const element = ref.current
-    if (!element || !isEffectEnabled) {
+
+    if (!holoActive) {
       setCssVars(STATIC_VARS)
       setIsInteracting(false)
       return
     }
+
+    if (!pointerActive) {
+      setIsInteracting(false)
+      if (!settings.interactive3d.idleFloat) {
+        setCssVars(toCssVars(getIdleVars()))
+      }
+      return
+    }
+
+    if (!element) return
 
     if (!settings.interactive3d.idleFloat) {
       setCssVars(toCssVars(getIdleVars()))
@@ -268,18 +291,19 @@ export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
     handlePointerLeave,
     handlePointerMove,
     handlePointerUp,
-    isEffectEnabled,
+    holoActive,
+    pointerActive,
     ref,
     settings.interactive3d.idleFloat,
   ])
 
   useEffect(() => {
-    if (!isEffectEnabled || isInteracting || settings.interactive3d.idleFloat) return
+    if (!holoActive || pointerActive || isInteracting || settings.interactive3d.idleFloat) return
     setCssVars(toCssVars(getIdleVars()))
-  }, [getIdleVars, isEffectEnabled, isInteracting, settings.interactive3d.idleFloat])
+  }, [getIdleVars, holoActive, pointerActive, isInteracting, settings.interactive3d.idleFloat])
 
   useEffect(() => {
-    if (!isEffectEnabled || isInteracting || !settings.interactive3d.idleFloat) return
+    if (!idleFloatActive || isInteracting) return
 
     const startTime = performance.now()
     let frameId = 0
@@ -294,7 +318,7 @@ export function useHoloTilt(ref: RefObject<HTMLElement | null>) {
     return () => {
       cancelAnimationFrame(frameId)
     }
-  }, [computeIdleFloat, isEffectEnabled, isInteracting, settings.interactive3d.idleFloat])
+  }, [computeIdleFloat, idleFloatActive, isInteracting])
 
   return {
     cssVars: cssVars as CSSProperties,

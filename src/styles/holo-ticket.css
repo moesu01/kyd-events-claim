@@ -108,12 +108,20 @@
   --holo-cosmos-bg: 35% 45%;
   --holo-rainbow-foil-size: 33%;
   --holo-radiant-foil-size: 25% auto;
-  --holo-card-glow: hsl(175, 100%, 90%);
-  --holo-red: #f80e35;
-  --holo-yellow: #eedf10;
-  --holo-green: #21e985;
-  --holo-blue: #0dbde9;
-  --holo-violet: #c929f1;
+  --holo-card-glow: oklch(0.943 0.077 186.89);
+  --holo-red: oklch(0.637 0.237 25.331);
+  --holo-yellow: oklch(0.865 0.177 99.58);
+  --holo-green: oklch(0.792 0.209 154.77);
+  --holo-blue: oklch(0.715 0.143 214.52);
+  --holo-violet: oklch(0.627 0.265 303.9);
+  --claimed-glow-inner: 0px;
+  --claimed-glow-mid: 2px;
+  --claimed-glow-outer: 14px;
+  --claimed-glow-far: 27px;
+  --claimed-glow-green: oklch(0.62 0.103 268 / 0);
+  --claimed-glow-blue: oklch(0.55 0.09 268 / 0.27);
+  --claimed-glow-yellow: oklch(0.72 0.077 268 / 0.31);
+  --claimed-glow-soft: oklch(0.88 0.05 268 / 0.19);
   --sunpillar-1: hsl(2, 100%, 73%);
   --sunpillar-2: hsl(53, 100%, 69%);
   --sunpillar-3: hsl(93, 100%, 69%);
@@ -190,6 +198,21 @@
     --rotate-y 0.12s ease-out,
     --card-opacity 0.12s ease-out,
     box-shadow 0.35s ease;
+}
+
+.holo-ticket__piece {
+  filter:
+    drop-shadow(0 4px 4px oklch(0 0 0 / 0.1))
+    drop-shadow(0 12px 8px oklch(0 0 0 / 0.05))
+    drop-shadow(0 0 calc(var(--claimed-glow-inner, 0px) * var(--claimed-glow-amount, 0)) var(--claimed-glow-green))
+    drop-shadow(0 0 calc(var(--claimed-glow-mid, 2px) * var(--claimed-glow-amount, 0)) var(--claimed-glow-blue))
+    drop-shadow(0 0 calc(var(--claimed-glow-outer, 14px) * var(--claimed-glow-amount, 0)) var(--claimed-glow-yellow))
+    drop-shadow(0 0 calc(var(--claimed-glow-far, 27px) * var(--claimed-glow-amount, 0)) var(--claimed-glow-soft));
+}
+
+.holo-ticket__surface--top-body.is-claimed-glow,
+.holo-ticket__surface--bottom-stub.is-claimed-glow {
+  overflow: visible;
 }
 
 .holo-ticket.is-interacting .holo-ticket__translator {

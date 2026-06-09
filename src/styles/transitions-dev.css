@@ -31,6 +31,19 @@
   --modal-scale: 0.96;
   --modal-scale-close: 0.96;
   --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --stamp-pop-dur: 420ms;
+  --stamp-pop-ease: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --stamp-blur: 3px;
+  --stamp-start-scale: 1.28;
+  --stamp-rotate: 5deg;
+  --claimed-glow-dur: 720ms;
+  --claimed-glow-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@property --claimed-glow-amount {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
 }
 
 /* 01-card-resize */
@@ -176,6 +189,84 @@
   }
 }
 
+/* claimed stamp — notification-badge-style pop, last beat after claim */
+.t-claimed-stamp {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+  transform: rotate(var(--stamp-rotate));
+  transform-origin: center center;
+}
+
+.t-claimed-stamp__mark {
+  display: block;
+  width: 64px;
+  height: 64px;
+  max-width: 64px;
+  max-height: 64px;
+  object-fit: contain;
+  transform: scale(0);
+  opacity: 0;
+  filter: blur(var(--stamp-blur));
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+}
+
+.t-claimed-stamp.is-stamped .t-claimed-stamp__mark {
+  animation: t-stamp-pop var(--stamp-pop-dur) var(--stamp-pop-ease) both;
+}
+
+@keyframes t-stamp-pop {
+  0% {
+    transform: scale(var(--stamp-start-scale));
+    opacity: 0.55;
+    filter: blur(var(--stamp-blur));
+  }
+
+  55% {
+    transform: scale(0.94);
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-claimed-stamp__mark {
+    animation: none !important;
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* claimed ticket glow — panel-reveal-style ramp via --claimed-glow-amount */
+.t-claimed-glow {
+  --claimed-glow-amount: 0;
+  transition: --claimed-glow-amount var(--claimed-glow-dur) var(--claimed-glow-ease);
+}
+
+.t-claimed-glow.is-claimed-glow-active {
+  --claimed-glow-amount: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-claimed-glow {
+    transition: none !important;
+  }
+
+  .t-claimed-glow.is-claimed-glow-active {
+    --claimed-glow-amount: 1;
+  }
+}
+
 /* 16-tabs-sliding — KYD full-width tab bar variant */
 .kyd-tabs-list {
   position: relative;
@@ -234,6 +325,10 @@
 
 .t-stagger-line--3 {
   transition-delay: calc(var(--stagger-stagger) * 2);
+}
+
+.t-stagger-line--4 {
+  transition-delay: calc(var(--stagger-stagger) * 3);
 }
 
 .t-stagger.is-shown .t-stagger-line {

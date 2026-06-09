@@ -24,6 +24,8 @@ Read before any block plan. **All plans complete.**
 | 10 | `EventPage` assembly + interface polish | Done |
 | 11 | Base UI + transitions-dev + Motion layer | Done |
 | 12 | Animation fixes — accordion, lineup timing, dropdown reopen, tab content swap | Done |
+| 13 | Claim page + mock OIDC auth (phone → code) + claimed state | Done |
+| 14 | URL routes (`/`, `/tickets`, `/claim`) | Done |
 
 ## Page Layout (`EventPage.tsx`)
 
@@ -86,7 +88,64 @@ Read before any block plan. **All plans complete.**
 
 `get_design_context` one node at a time at 375px. Full page: `3263:3428`.
 
-Assets in `/public/assets/`: `venue-logo.png`, `poster.jpg`, `kyd-labs-logo.png` (text fallback), `artists/*.jpg` (initial fallback).
+Assets in `/public/assets/`: `venue-logo.png`, `poster.jpg`, `kyd-logo-white.png` (auth modal), `kyd-labs-logo.png` (legacy), `claim/*` (StubHub logo, poster, transfer icon).
+
+## Routes
+
+| Route | Page | Header |
+|---|---|---|
+| `/` | Event page | `AppHeader` |
+| `/tickets` | Ticket page (stub) | `AppHeader` |
+| `/claim` | Claim page | None — StubHub partner hero |
+
+Navigation: `MyTicketsMenu` uses `react-router-dom` `useNavigate()`. Venue logo links to `/`.
+
+## Claim + Mock Auth (Plan 13)
+
+**Sub-agent brief:** Read this section before touching `/claim` or auth components.
+
+### Flow
+
+```
+/claim (pending) → [Claim CTA] → Auth modal phone step → code step → completeClaim() → /claim (claimed)
+```
+
+- **State:** `ClaimFlowProvider` (`src/context/claim-flow-context.tsx`) — `claimStatus: 'pending' | 'claimed'`
+- **No real OIDC/API** — mock validation only (phone ≥10 digits, code = 4 digits)
+- **Post-claim:** Headline swaps to `claimedHeadline` ("You've claimed your ticket"); expiry badge + disclaimer hide; CTA → "View your tickets on KYD Labs" (no action yet). No success banner.
+
+### Auth modal
+
+| Piece | Implementation |
+|---|---|
+| Shell | Base UI `Dialog` + `useModalClasses` + `hasOpened` portal; popup `#111111`, backdrop `blur(12px)` |
+| Steps | `phone` → `code` via `AnimatedPresencePanel` keyed by step |
+| Code input | `ClaimOtpInput` — 4 segmented boxes; auto-advance + paste; **auto-submit** on 4 digits (no Continue on code step) |
+| Logo | `/assets/kyd-logo-white.png` |
+| Copy | Title "Sign in with KYD Labs"; subtitle "Continue to **StubHub**" |
+| Primary | White pill Continue on phone step only; disabled until ≥10 digits |
+| Secondary | Ghost text Cancel via `Dialog.Close` — **never** equal-weight white button |
+| Page blur | `ClaimPage` blurs/dims ticket content while modal open (`filter: blur(6px)`, opacity 0.72) |
+| Reset | Form state clears when modal closes |
+
+### Claim page layout
+
+- No `AppHeader`; `useClaimPageBackground()` for black gradient
+- `ClaimHeroHeader` — headline swap via `AnimatedPresencePanel` keyed by `headline`
+- Expiry badge — `AnimatePresence` exit when claimed
+- `ClaimTicketCard` — CTA swap with motion; disclaimer hidden when claimed; prominent CTA uses `claimButtonPopVariants` + stronger `boxShadow`
+- Stagger enter via `.t-stagger` on hero → badge → card
+
+### Key files
+
+`ClaimPage.tsx` · `claim-auth-dialog.tsx` · `claim-auth-field.tsx` · `claim-otp-input.tsx` · `claim-ticket-card.tsx` · `claim-ticket-button.tsx` · `claim-flow-context.tsx` · `mock-claim.ts` · `routes/paths.ts`
+
+### Do not
+
+- Add OIDC scope bullet list unless design specifies it
+- Make Continue and Cancel both filled white buttons
+- Add real redirect/API without explicit request
+- Put `AppHeader` on claim page
 
 ## Animated primitives (Base UI + transitions-dev + Motion)
 
@@ -116,7 +175,9 @@ Assets in `/public/assets/`: `venue-logo.png`, `poster.jpg`, `kyd-labs-logo.png`
 | Tab content swap | `Tabs` | — | `AnimatedPresencePanel` keyed by `activeTab` |
 | Staggered rows (hero copy, etc.) | — | `18-texts-reveal` `.t-stagger` + `useStaggerReveal` | — |
 | Staggered list rows (line-up) | — | — | Motion `staggerChildren` ~80ms + `lineupRowVariants` |
-| View swap (accordion, tabs) | — | — | `AnimatedPresencePanel` + `motion-presets.ts` |
+| View swap (accordion, tabs, auth steps, claim headline/CTA) | — | — | `AnimatedPresencePanel` + `motion-presets.ts` |
+| Modal open/close | `Dialog` | `06-modal` `.t-modal` + `useModalClasses` | — |
+| Claim CTA pop (post-auth) | — | — | `claimButtonPopVariants` on `ClaimTicketButton` when `isProminent` |
 
 **Timing reference:**
 
@@ -134,8 +195,8 @@ Assets in `/public/assets/`: `venue-logo.png`, `poster.jpg`, `kyd-labs-logo.png`
 
 ## Key Files
 
-`EventPage.tsx` · `theme/index.ts` · `kyd-accordion-section.tsx` · `transitions-dev.css` · `ticket-cart-context.tsx`
+`EventPage.tsx` · `ClaimPage.tsx` · `claim-auth-dialog.tsx` · `claim-flow-context.tsx` · `theme/index.ts` · `kyd-accordion-section.tsx` · `transitions-dev.css` · `ticket-cart-context.tsx`
 
 ## Out of Scope / Acceptance
 
-No countdown, sign-in, real resale, or checkout/API. Pixel-match Figma at 375px; interactive states work with mock data; `npm run build` passes.
+No live countdown, real resale, checkout/API, or real OIDC redirect. Mock phone + 4-digit code only. Pixel-match Figma at 375px; interactive states work with mock data; `npm run build` passes.

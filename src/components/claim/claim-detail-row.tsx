@@ -1,4 +1,5 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
+import { useEventAccent } from '../../context/event-accent-context'
 
 interface ClaimDetailRowProps {
   label: string
@@ -6,25 +7,23 @@ interface ClaimDetailRowProps {
   secondaryValue: string
 }
 
-const labelColor = 'rgba(66,62,0,0.75)'
-const valueColor = 'rgba(66,62,0,0.9)'
-const borderColor = 'rgba(66,62,0,0.15)'
-
 export function ClaimDetailRow({ label, primaryValue, secondaryValue }: ClaimDetailRowProps) {
+  const { claimTicketColors } = useEventAccent()
+
   return (
     <VStack
       align="stretch"
       gap="6px"
       pt="8px"
       borderTop="1px solid"
-      borderColor={borderColor}
+      borderColor={claimTicketColors.borderColor}
       w="full"
     >
       <Text
         fontSize="12px"
         fontWeight="500"
         lineHeight="1"
-        color={labelColor}
+        color={claimTicketColors.labelColor}
       >
         {label}
       </Text>
@@ -34,7 +33,7 @@ export function ClaimDetailRow({ label, primaryValue, secondaryValue }: ClaimDet
           fontSize="14px"
           fontWeight="600"
           lineHeight="1"
-          color={valueColor}
+          color={claimTicketColors.valueColor}
           truncate
           minW={0}
         >
@@ -44,7 +43,7 @@ export function ClaimDetailRow({ label, primaryValue, secondaryValue }: ClaimDet
           fontSize="14px"
           fontWeight="600"
           lineHeight="1"
-          color={valueColor}
+          color={claimTicketColors.valueColor}
           flexShrink={0}
           whiteSpace="nowrap"
           fontVariantNumeric="tabular-nums"

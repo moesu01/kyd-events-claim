@@ -1,0 +1,27 @@
+.claim-ticket-hit-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  color: transparent;
+  background: transparent;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.claim-ticket-hit-layer:hover,
+.claim-ticket-hit-layer:focus-visible {
+  cursor: pointer;
+}
+
+.holo-ticket.is-ticket-link,
+.holo-ticket.is-ticket-link * {
+  cursor: pointer;
+}
+
+.holo-ticket.is-ticket-link .holo-ticket__shine,
+.holo-ticket.is-ticket-link .holo-ticket__glare {
+  pointer-events: none;
+}
