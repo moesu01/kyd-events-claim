@@ -84,7 +84,7 @@ export interface HoloTicketSettings {
 }
 
 /** Set true to wire holo tuning through DialKit in dev. */
-export const HOLO_DIALKIT_ENABLED = false
+export const HOLO_DIALKIT_ENABLED = true
 
 export const DEFAULT_HOLO_TICKET_SETTINGS: HoloTicketSettings = {
   enabled: true,
