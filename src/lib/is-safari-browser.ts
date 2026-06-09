@@ -1,6 +1,16 @@
 /** Shine contrast tuned for WebKit — inline style must set this (CSS !important loses to React style). */
 export const SAFARI_SHINE_CONTRAST = 1.12
 
+/** iOS WebKit cannot paint `background-attachment: fixed` across the full viewport. */
+export function isIosDevice(): boolean {
+  if (typeof navigator === 'undefined') return false
+
+  return (
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  )
+}
+
 export function isSafariBrowser(): boolean {
   if (typeof navigator === 'undefined') return false
 
