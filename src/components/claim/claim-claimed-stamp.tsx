@@ -1,10 +1,17 @@
 import { Box, Image } from '@chakra-ui/react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEventAccent } from '../../context/event-accent-context'
 import { assetUrl } from '../../lib/asset-url'
+import { buildClaimedStampAccentCssVars } from '../../lib/oklch-color'
 import { mergeClassNames } from '../../lib/merge-class-names'
 import { useReducedMotion } from '../../lib/use-reduced-motion'
 
-const CLAIMED_STAMP_URL = assetUrl('/assets/claim/claimed-stamp.png')
+export const CLAIMED_STAMP_URLS = {
+  original: assetUrl('/assets/claim/claimed-stamp.png'),
+  v2: assetUrl('/assets/claim/claimed-stamp-v2.png'),
+} as const
+
+const ACTIVE_CLAIMED_STAMP_URL = CLAIMED_STAMP_URLS.v2
 
 interface ClaimClaimedStampProps {
   isClaimed: boolean
@@ -17,6 +24,8 @@ export function ClaimClaimedStamp({
   isReady = false,
   onStampComplete,
 }: ClaimClaimedStampProps) {
+  const { accentColor } = useEventAccent()
+  const stampAccentVars = useMemo(() => buildClaimedStampAccentCssVars(accentColor), [accentColor])
   const prefersReducedMotion = useReducedMotion()
   const [isStamped, setIsStamped] = useState(false)
   const hasCompletedRef = useRef(false)
@@ -54,11 +63,12 @@ export function ClaimClaimedStamp({
   return (
     <Box
       className={mergeClassNames('t-claimed-stamp', isStamped ? 'is-stamped' : '')}
+      style={stampAccentVars}
       aria-hidden="true"
     >
       <Image
         className="t-claimed-stamp__mark"
-        src={CLAIMED_STAMP_URL}
+        src={ACTIVE_CLAIMED_STAMP_URL}
         alt=""
         draggable={false}
         onAnimationEnd={handleAnimationEnd}

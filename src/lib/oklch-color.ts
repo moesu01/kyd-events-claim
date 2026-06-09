@@ -157,6 +157,27 @@ export interface ClaimedGlowAlphas {
   softAlpha: number
 }
 
+/** Neon green stamp asset — hue-rotate shifts from this toward the event accent. */
+const CLAIMED_STAMP_BASE_HUE = 120
+const CLAIMED_STAMP_ACCENT_TINT_MIX = 0.72
+
+function getShortestHueDelta(fromHue: number, toHue: number): number {
+  let delta = toHue - fromHue
+  if (delta > 180) delta -= 360
+  if (delta < -180) delta += 360
+  return delta
+}
+
+export function buildClaimedStampAccentCssVars(accentColor: string): Record<string, string> {
+  const accentHue = getAccentHue(accentColor)
+  const hueRotate = getShortestHueDelta(CLAIMED_STAMP_BASE_HUE, accentHue) * CLAIMED_STAMP_ACCENT_TINT_MIX
+
+  return {
+    '--stamp-hue-rotate': `${hueRotate}deg`,
+    '--stamp-saturate': '1.08',
+  }
+}
+
 export function buildClaimedGlowAccentCssVars(
   accentColor: string,
   alphas: ClaimedGlowAlphas,

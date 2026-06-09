@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { getEffectiveShineContrast } from './is-safari-browser'
 import type { ClaimedGlowAlphas } from './oklch-color'
 
 export type HoloFoilPreset =
@@ -82,6 +83,9 @@ export interface HoloTicketSettings {
   interactive3d: HoloTicketInteractiveSettings
 }
 
+/** Set true to wire holo tuning through DialKit in dev. */
+export const HOLO_DIALKIT_ENABLED = false
+
 export const DEFAULT_HOLO_TICKET_SETTINGS: HoloTicketSettings = {
   enabled: true,
   claimedGlow: {
@@ -159,7 +163,7 @@ export function buildHoloTicketCssVars(settings: HoloTicketSettings): CSSPropert
     '--holo-pillar-space': `${foil.pillarSpace}%`,
     '--holo-emboss-opacity': `${foil.embossOpacity}`,
     '--holo-shine-brightness': `${foil.shineBrightness}`,
-    '--holo-shine-contrast': `${foil.shineContrast}`,
+    '--holo-shine-contrast': `${getEffectiveShineContrast(foil.shineContrast)}`,
     '--holo-shine-saturation': `${foil.shineSaturation}`,
     '--holo-pillar-brightness-base': `${foil.pillarBrightnessBase}`,
     '--holo-pillar-brightness-range': `${foil.pillarBrightnessRange}`,

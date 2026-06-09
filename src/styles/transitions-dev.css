@@ -209,7 +209,8 @@
   object-fit: contain;
   transform: scale(0);
   opacity: 0;
-  filter: blur(var(--stamp-blur));
+  filter: blur(var(--stamp-blur)) hue-rotate(var(--stamp-hue-rotate, 0deg))
+    saturate(var(--stamp-saturate, 1));
   transform-origin: center center;
   will-change: transform, opacity, filter;
 }
@@ -222,19 +223,20 @@
   0% {
     transform: scale(var(--stamp-start-scale));
     opacity: 0.55;
-    filter: blur(var(--stamp-blur));
+    filter: blur(var(--stamp-blur)) hue-rotate(var(--stamp-hue-rotate, 0deg))
+      saturate(var(--stamp-saturate, 1));
   }
 
   55% {
     transform: scale(0.94);
     opacity: 1;
-    filter: blur(0);
+    filter: hue-rotate(var(--stamp-hue-rotate, 0deg)) saturate(var(--stamp-saturate, 1));
   }
 
   100% {
     transform: scale(1);
     opacity: 1;
-    filter: blur(0);
+    filter: hue-rotate(var(--stamp-hue-rotate, 0deg)) saturate(var(--stamp-saturate, 1));
   }
 }
 
@@ -243,7 +245,7 @@
     animation: none !important;
     transform: scale(1);
     opacity: 1;
-    filter: blur(0);
+    filter: hue-rotate(var(--stamp-hue-rotate, 0deg)) saturate(var(--stamp-saturate, 1));
   }
 }
 

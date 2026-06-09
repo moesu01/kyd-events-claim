@@ -2,6 +2,7 @@ import { useDialKit } from 'dialkit'
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import {
   DEFAULT_HOLO_TICKET_SETTINGS,
+  HOLO_DIALKIT_ENABLED,
   HOLO_FOIL_PRESET_OPTIONS,
   type HoloFoilPreset,
   type HoloTicketSettings,
@@ -64,68 +65,80 @@ function useHoloTicketDialKit() {
   })
 }
 
+function mapDialToSettings(dial: ReturnType<typeof useHoloTicketDialKit>): HoloTicketSettings {
+  return {
+    enabled: dial.enabled,
+    claimedGlow: {
+      glowInner: dial.claimedGlow.glowInner,
+      glowMid: dial.claimedGlow.glowMid,
+      glowOuter: dial.claimedGlow.glowOuter,
+      glowFar: dial.claimedGlow.glowFar,
+      greenAlpha: dial.claimedGlow.greenAlpha,
+      blueAlpha: dial.claimedGlow.blueAlpha,
+      yellowAlpha: dial.claimedGlow.yellowAlpha,
+      softAlpha: dial.claimedGlow.softAlpha,
+    },
+    foil: {
+      preset: dial.foil.preset as HoloFoilPreset,
+      idleOpacity: dial.foil.idleOpacity,
+      activeOpacity: dial.foil.activeOpacity,
+      glareMultiplier: dial.foil.glareMultiplier,
+      gradientSize: dial.foil.gradientSize,
+      shimmerDuration: dial.foil.shimmerDuration,
+      oliveAlpha: dial.foil.oliveAlpha,
+      goldAlpha: dial.foil.goldAlpha,
+      cyanAlpha: dial.foil.cyanAlpha,
+      idleShimmer: dial.foil.idleShimmer,
+      idleOpacityPulse: dial.foil.idleOpacityPulse,
+      glitterSize: dial.foil.glitterSize,
+      pillarAngle: dial.foil.pillarAngle,
+      pillarSpace: dial.foil.pillarSpace,
+      embossOpacity: dial.foil.embossOpacity,
+      shineBrightness: dial.foil.shineBrightness,
+      shineContrast: dial.foil.shineContrast,
+      shineSaturation: dial.foil.shineSaturation,
+      pillarBrightnessBase: dial.foil.pillarBrightnessBase,
+      pillarBrightnessRange: dial.foil.pillarBrightnessRange,
+      pillarTrackStrength: dial.foil.pillarTrackStrength,
+      glareContrast: dial.foil.glareContrast,
+      idleShimmerRange: dial.foil.idleShimmerRange,
+    },
+    interactive3d: {
+      perspective: dial.interactive3d.perspective,
+      maxTilt: dial.interactive3d.maxTilt,
+      floatTranslateY: dial.interactive3d.floatTranslateY,
+      floatRotate: dial.interactive3d.floatRotate,
+      floatDuration: dial.interactive3d.floatDuration,
+      interactLift: dial.interactive3d.interactLift,
+      interactScale: dial.interactive3d.interactScale,
+      idleFloat: dial.interactive3d.idleFloat,
+    },
+  }
+}
+
+function HoloTicketDialSettingsProvider({ children }: { children: ReactNode }) {
+  const dial = useHoloTicketDialKit()
+  const settings = useMemo(() => mapDialToSettings(dial), [dial])
+
+  return (
+    <HoloTicketSettingsContext.Provider value={settings}>{children}</HoloTicketSettingsContext.Provider>
+  )
+}
+
 interface HoloTicketSettingsProviderProps {
   children: ReactNode
 }
 
 export function HoloTicketSettingsProvider({ children }: HoloTicketSettingsProviderProps) {
-  const dial = useHoloTicketDialKit()
+  if (!HOLO_DIALKIT_ENABLED) {
+    return (
+      <HoloTicketSettingsContext.Provider value={DEFAULT_HOLO_TICKET_SETTINGS}>
+        {children}
+      </HoloTicketSettingsContext.Provider>
+    )
+  }
 
-  const settings = useMemo<HoloTicketSettings>(
-    () => ({
-      enabled: dial.enabled,
-      claimedGlow: {
-        glowInner: dial.claimedGlow.glowInner,
-        glowMid: dial.claimedGlow.glowMid,
-        glowOuter: dial.claimedGlow.glowOuter,
-        glowFar: dial.claimedGlow.glowFar,
-        greenAlpha: dial.claimedGlow.greenAlpha,
-        blueAlpha: dial.claimedGlow.blueAlpha,
-        yellowAlpha: dial.claimedGlow.yellowAlpha,
-        softAlpha: dial.claimedGlow.softAlpha,
-      },
-      foil: {
-        preset: dial.foil.preset as HoloFoilPreset,
-        idleOpacity: dial.foil.idleOpacity,
-        activeOpacity: dial.foil.activeOpacity,
-        glareMultiplier: dial.foil.glareMultiplier,
-        gradientSize: dial.foil.gradientSize,
-        shimmerDuration: dial.foil.shimmerDuration,
-        oliveAlpha: dial.foil.oliveAlpha,
-        goldAlpha: dial.foil.goldAlpha,
-        cyanAlpha: dial.foil.cyanAlpha,
-        idleShimmer: dial.foil.idleShimmer,
-        idleOpacityPulse: dial.foil.idleOpacityPulse,
-        glitterSize: dial.foil.glitterSize,
-        pillarAngle: dial.foil.pillarAngle,
-        pillarSpace: dial.foil.pillarSpace,
-        embossOpacity: dial.foil.embossOpacity,
-        shineBrightness: dial.foil.shineBrightness,
-        shineContrast: dial.foil.shineContrast,
-        shineSaturation: dial.foil.shineSaturation,
-        pillarBrightnessBase: dial.foil.pillarBrightnessBase,
-        pillarBrightnessRange: dial.foil.pillarBrightnessRange,
-        pillarTrackStrength: dial.foil.pillarTrackStrength,
-        glareContrast: dial.foil.glareContrast,
-        idleShimmerRange: dial.foil.idleShimmerRange,
-      },
-      interactive3d: {
-        perspective: dial.interactive3d.perspective,
-        maxTilt: dial.interactive3d.maxTilt,
-        floatTranslateY: dial.interactive3d.floatTranslateY,
-        floatRotate: dial.interactive3d.floatRotate,
-        floatDuration: dial.interactive3d.floatDuration,
-        interactLift: dial.interactive3d.interactLift,
-        interactScale: dial.interactive3d.interactScale,
-        idleFloat: dial.interactive3d.idleFloat,
-      },
-    }),
-    [dial],
-  )
-
-  return (
-    <HoloTicketSettingsContext.Provider value={settings}>{children}</HoloTicketSettingsContext.Provider>
-  )
+  return <HoloTicketDialSettingsProvider>{children}</HoloTicketDialSettingsProvider>
 }
 
 export function useHoloTicketSettings() {
