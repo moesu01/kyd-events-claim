@@ -16,8 +16,38 @@ export const mockEvent: Event = {
   timeRange: '6:30PM - 9:30PM',
   venue: 'The Cathedral of St. John the Divine',
   city: 'New York, NY',
-  description:
-    'Honey Revenge - The Loving and Losing Tour w/ Daisy Grenade, + Vana - Live at LPR on Tuesday, June 17th, 2025. 6:00 PM doors | 7:00 PM show (16+) More shows at http://LPR.com Sign up for our newsletter at http://bit.ly/LPR-newsletter When an event sells out, fans who missed out on tickets can join the Waitlist for a chance to purchase tickets from someone who can no longer attend. Joining the Waitlist does NOT guarantee entry to the event, please do NOT arrive at the venue unless you are contacted about tickets becoming available. Joining the Waitlist: If you\'re looking for a ticket to a sold out show, add your info the the corresponding Waitlist. If a ticket becomes available, you\'ll be notified and your credit card will be charged. Listing Your Ticket on the Waitlist: If you already have a ticket, you can list it on the waitlist through the "My Tickets" page. Once we find a buyer for your ticket, you will be notified. All ticket sales are final. No refunds or exchanges. Physical photo ID required for all shows with age restrictions – no exceptions.',
+  ageRestriction: '18+',
+  eventInfo: {
+    headline: 'Honey Revenge — The Loving and Losing Tour w/ Daisy Grenade, + Vana',
+    venueAndDate: 'Live at LPR on Tuesday, June 17th, 2025',
+    schedule: '6:00 PM doors · 7:00 PM show · 16+',
+    links: [
+      { label: 'More shows at LPR.com', href: 'https://lpr.com' },
+      { label: 'Sign up for our newsletter', href: 'https://bit.ly/LPR-newsletter' },
+    ],
+    sections: [
+      {
+        title: 'Waitlist',
+        intro:
+          'When an event sells out, fans who missed out on tickets can join the waitlist for a chance to purchase tickets from someone who can no longer attend.',
+        bullets: [
+          'Joining the waitlist does not guarantee entry. Do not arrive at the venue unless you are contacted about tickets becoming available.',
+        ],
+        subsections: [
+          {
+            title: 'Joining the waitlist',
+            body: 'If you are looking for a ticket to a sold out show, add your info to the corresponding waitlist. If a ticket becomes available, you will be notified and your credit card will be charged.',
+          },
+          {
+            title: 'Listing your ticket',
+            body: 'If you already have a ticket, you can list it on the waitlist through the My Tickets page. Once we find a buyer, you will be notified.',
+          },
+        ],
+      },
+    ],
+    policy:
+      'All ticket sales are final. No refunds or exchanges. Physical photo ID required for all shows with age restrictions — no exceptions.',
+  },
   ticketTiers: [
     {
       id: 'second-release',

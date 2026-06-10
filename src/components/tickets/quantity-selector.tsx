@@ -1,5 +1,8 @@
 import { Minus, Plus } from '@phosphor-icons/react'
 import { Flex, Text, chakra } from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { useEventAccent } from '../../context/event-accent-context'
+import { getQuantitySelectorBg } from '../../lib/oklch-color'
 
 interface QuantitySelectorProps {
   value: number
@@ -18,6 +21,11 @@ export function QuantitySelector({
   ariaLabel = 'Ticket quantity',
   isSelected = false,
 }: QuantitySelectorProps) {
+  const { accentColor } = useEventAccent()
+  const selectorBg = useMemo(
+    () => getQuantitySelectorBg(accentColor, isSelected),
+    [accentColor, isSelected],
+  )
   const isAtMin = value <= 0
   const isAtMax = value >= max
 
@@ -35,7 +43,7 @@ export function QuantitySelector({
     <Flex
       align="center"
       gap="2px"
-      bg={isSelected ? 'oklch(0.28 0 0)' : 'bg.surface'}
+      bg={selectorBg}
       borderRadius="8px"
       px="4px"
       py="4px"

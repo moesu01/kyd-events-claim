@@ -37,8 +37,8 @@ export function AppHeader({
         <Image
           src={logoUrl}
           alt="Venue logo"
-          w="80px"
-          h="32px"
+          w="110px"
+          h="44px"
           objectFit="contain"
         />
       </LogoLink>

@@ -20,15 +20,14 @@ export function SoldOutRow({ name, isFirst, isLast }: SoldOutRowProps) {
       borderLeftWidth="1px"
       borderRightWidth="1px"
       borderBottomWidth={isLast ? '1px' : '0'}
-      borderTopRadius={isFirst ? '8px' : undefined}
-      borderBottomRadius={isLast ? '8px' : undefined}
+      borderTopRadius={isFirst ? 'ticketCard' : undefined}
+      borderBottomRadius={isLast ? 'ticketCard' : undefined}
     >
       <Flex
         align="center"
         justify="space-between"
         w="full"
         p="8px"
-        borderRadius="5px"
       >
         <Text fontSize="16px" fontWeight="500" lineHeight="24px" color={mutedTextColorLight}>
           {name}

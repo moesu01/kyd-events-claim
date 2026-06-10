@@ -1,11 +1,13 @@
 import { CaretDown } from '@phosphor-icons/react'
 import { Box, Flex, Text, chakra } from '@chakra-ui/react'
 import { Menu } from '@base-ui/react/menu'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTicketPrototype } from '../../context/ticket-prototype-context'
 import { mergeClassNames } from '../../lib/merge-class-names'
 import { useDropdownClasses } from '../../lib/use-dropdown-classes'
 import { myTicketsRoutes, type MyTicketsRouteKey } from '../../routes/paths'
+import { PrototypeToggle } from '../ui/prototype-toggle'
 
 interface MyTicketsMenuProps {
   ticketCount?: number
@@ -20,9 +22,14 @@ const menuItems: Array<{ id: MyTicketsRouteKey; label: string }> = [
 
 export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
   const navigate = useNavigate()
+  const { isResaleEnabled, setIsResaleEnabled } = useTicketPrototype()
   const [isOpen, setIsOpen] = useState(false)
   const [hasOpened, setHasOpened] = useState(false)
   const { className: dropdownClassName } = useDropdownClasses(isOpen)
+
+  const handleResaleToggleClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+  }
 
   useEffect(() => {
     if (isOpen) setHasOpened(true)
@@ -42,8 +49,8 @@ export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
             display="flex"
             alignItems="center"
             gap="6px"
-            h="22px"
-            px="8px"
+            py="4px"
+            px="10px"
             borderRadius="8px"
             border="1px solid"
             borderColor="border.subtle"
@@ -61,14 +68,15 @@ export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
             <Flex
               align="center"
               justify="center"
-              w="22px"
-              h="22px"
+              minW="20px"
+              h="20px"
+              px="5px"
               borderRadius="pill"
               bg="#666666"
               flexShrink={0}
             >
               <Text
-                fontSize="14px"
+                fontSize="12px"
                 fontWeight="700"
                 lineHeight="1"
                 color="#F7FAFC"
@@ -106,7 +114,7 @@ export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
                     borderRadius: '8px',
                     border: '1px solid rgba(255,255,255,0.2)',
                     paddingBlock: '4px',
-                    minWidth: '140px',
+                    minWidth: '168px',
                     boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                     zIndex: 50,
                     ...props.style,
@@ -143,6 +151,26 @@ export function MyTicketsMenu({ ticketCount = 0 }: MyTicketsMenuProps) {
                   )}
                 />
               ))}
+
+              <Box
+                borderTopWidth="1px"
+                borderTopColor="border.subtle"
+                px="12px"
+                py="10px"
+                onClick={handleResaleToggleClick}
+                onMouseDown={handleResaleToggleClick}
+              >
+                <Flex align="center" justify="space-between" gap="10px">
+                  <Text fontSize="14px" fontWeight="500" lineHeight="1" color="text.primary">
+                    Resale
+                  </Text>
+                  <PrototypeToggle
+                    checked={isResaleEnabled}
+                    onCheckedChange={setIsResaleEnabled}
+                    ariaLabel="Toggle resale tab"
+                  />
+                </Flex>
+              </Box>
             </Menu.Popup>
           </Menu.Positioner>
         </Menu.Portal>

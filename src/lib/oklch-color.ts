@@ -76,6 +76,16 @@ export function parseOklch(value: string): Oklch | null {
   }
 }
 
+export function getQuantitySelectorBg(accentColor: string, isSelected: boolean): string {
+  const hue = parseOklch(accentColor)?.h ?? 268
+
+  if (isSelected) {
+    return formatOklch({ l: 0.28, c: 0.03, h: hue })
+  }
+
+  return formatOklchWithAlpha({ l: 1, c: 0.02, h: hue }, 0.05)
+}
+
 export function getTicketCardBorderShadow(accentColor: string, isSelected: boolean): string {
   const hue = parseOklch(accentColor)?.h ?? 268
 
@@ -95,7 +105,7 @@ export function getTicketCardBorderShadow(accentColor: string, isSelected: boole
     ].join(', ')
   }
 
-  const border = formatOklchWithAlpha({ l: 0.88, c: 0.04, h: hue }, 0.5)
+  const border = formatOklchWithAlpha({ l: 0.88, c: 0.04, h: hue }, 0.35)
   return `inset 0 0 0 1px ${border}`
 }
 

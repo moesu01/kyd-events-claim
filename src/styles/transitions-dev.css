@@ -38,6 +38,17 @@
   --stamp-rotate: 5deg;
   --claimed-glow-dur: 720ms;
   --claimed-glow-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --event-page-accent: oklch(0.24 0.095 268);
+  --ticket-section-border-color: rgba(204, 237, 255, 0.2);
+  --ticket-section-glow-blur: 24px;
+  --ticket-section-glow-spread: 6px;
+  --ticket-section-glow-color: rgba(204, 237, 255, 0.08);
+  --purchase-fill-dur: 300ms;
+  --purchase-fill-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-swap-dur: 150ms;
+  --text-swap-translate-y: 4px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-in-out;
 }
 
 @property --claimed-glow-amount {
@@ -389,4 +400,99 @@
 
 .kyd-accordion-caret[data-open] {
   transform: rotate(180deg);
+}
+
+/* purchase button — ghost ↔ filled layered fill */
+.t-purchase-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  transition:
+    color var(--purchase-fill-dur) var(--purchase-fill-ease),
+    transform 150ms ease-out;
+}
+
+.t-purchase-btn[data-filled='true'] {
+  color: #0a1219;
+}
+
+.t-purchase-btn__fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity var(--purchase-fill-dur) var(--purchase-fill-ease),
+    transform var(--purchase-fill-dur) var(--purchase-fill-ease);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.t-purchase-btn[data-filled='true'] .t-purchase-btn__fill {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.t-purchase-btn__border {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 1;
+  transition: opacity var(--purchase-fill-dur) var(--purchase-fill-ease);
+  pointer-events: none;
+}
+
+.t-purchase-btn[data-filled='true'] .t-purchase-btn__border {
+  opacity: 0;
+}
+
+.t-purchase-btn__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-purchase-btn,
+  .t-purchase-btn__fill,
+  .t-purchase-btn__border {
+    transition: none !important;
+  }
+
+  .t-purchase-btn[data-filled='true'] .t-purchase-btn__fill {
+    transform: scale(1);
+  }
+}
+
+/* ticket section — inset border + inner glow (tune via --ticket-section-* vars in :root) */
+.t-ticket-section {
+  box-shadow:
+    inset 0 0 0 1px var(--ticket-section-border-color),
+    inset 0 0 var(--ticket-section-glow-blur) var(--ticket-section-glow-spread)
+      var(--ticket-section-glow-color);
+}
+
+/* sticky purchase bar — black base, original fade stops, accent in the transition (--event-page-accent) */
+.t-sticky-purchase-bar {
+  --sticky-purchase-bar-fade: color-mix(in oklch, #000000 82%, var(--event-page-accent));
+
+  background: linear-gradient(
+    to top,
+    #000000 0%,
+    #000000 58%,
+    color-mix(in oklch, var(--sticky-purchase-bar-fade) 82%, transparent) 72%,
+    color-mix(in oklch, var(--sticky-purchase-bar-fade) 45%, transparent) 86%,
+    transparent 100%
+  );
 }

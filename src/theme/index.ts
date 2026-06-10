@@ -11,6 +11,8 @@ const config = defineConfig({
       radii: {
         card: { value: '12px' },
         pill: { value: '9999px' },
+        ticketSection: { value: '16px' },
+        ticketCard: { value: '8px' },
       },
       spacing: {
         pageX: { value: '12px' },

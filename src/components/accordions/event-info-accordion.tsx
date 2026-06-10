@@ -1,11 +1,12 @@
 import { Info } from '@phosphor-icons/react'
-import { Text } from '@chakra-ui/react'
 import { useLayoutEffect, useRef, useState } from 'react'
+import type { EventInfo } from '../../types/event'
 import { useReducedMotion } from '../../lib/use-reduced-motion'
+import { EventInfoContent } from './event-info-content'
 import { KydAccordionSection } from '../ui/kyd-accordion-section'
 
 interface EventInfoAccordionProps {
-  description: string
+  eventInfo: EventInfo
   defaultExpanded?: boolean
 }
 
@@ -16,15 +17,8 @@ const TEXT_LINE_HEIGHT = 1.5
 const PREVIEW_LINES = 3
 const COLLAPSED_HEIGHT = TEXT_FONT_SIZE_PX * TEXT_LINE_HEIGHT * PREVIEW_LINES
 
-const textProps = {
-  fontSize: '12px',
-  fontWeight: '400',
-  lineHeight: '1.5',
-  color: 'text.secondary',
-} as const
-
 export function EventInfoAccordion({
-  description,
+  eventInfo,
   defaultExpanded = false,
 }: EventInfoAccordionProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
@@ -42,7 +36,7 @@ export function EventInfoAccordion({
     const observer = new ResizeObserver(updateHeight)
     observer.observe(element)
     return () => observer.disconnect()
-  }, [description])
+  }, [eventInfo])
 
   const height = isExpanded ? fullHeight : COLLAPSED_HEIGHT
 
@@ -63,7 +57,7 @@ export function EventInfoAccordion({
         }}
       >
         <div ref={contentRef}>
-          <Text {...textProps}>{description}</Text>
+          <EventInfoContent eventInfo={eventInfo} />
         </div>
       </div>
     </KydAccordionSection>

@@ -11,8 +11,15 @@ const ReadMoreButton = chakra('button')
 
 const READ_MORE_SUFFIX = '... Read more'
 
+const ticketDescriptionTextProps = {
+  fontSize: '12px',
+  fontWeight: '400',
+  lineHeight: '1.5',
+  css: { textWrap: 'pretty' },
+} as const
+
 const selectedCardBg = '#000000'
-const unselectedCardBg = 'rgba(255,255,255,0.01)'
+const unselectedCardBg = 'rgba(0, 0, 0, 0.1)'
 
 interface TicketCardProps {
   tier: TicketTier
@@ -49,7 +56,7 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
         position="relative"
         w="full"
         p="12px"
-        borderRadius="8px"
+        borderRadius="ticketCard"
         bg={unselectedCardBg}
         boxShadow={defaultBorderShadow}
         className="t-ticket-card"
@@ -75,7 +82,7 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
             flexShrink={0}
             px="12px"
             py="10px"
-            borderRadius="8px"
+            borderRadius="ticketCard"
             border="1px solid"
             borderColor="border.subtle"
             bg="transparent"
@@ -94,14 +101,7 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
           </WaitlistButton>
         </Flex>
         {tier.description ? (
-          <Text
-            mt="8px"
-            fontSize="11px"
-            fontWeight="400"
-            lineHeight="1.25"
-            color={mutedTextColor}
-            whiteSpace="pre-wrap"
-          >
+          <Text mt="8px" color={mutedTextColor} {...ticketDescriptionTextProps}>
             {displayDescription}
           </Text>
         ) : null}
@@ -116,7 +116,7 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
       position="relative"
       w="full"
       p="12px"
-      borderRadius="8px"
+      borderRadius="ticketCard"
       bg={isSelected ? selectedCardBg : unselectedCardBg}
       boxShadow={isSelected ? selectedBorderShadow : defaultBorderShadow}
       className="t-ticket-card"
@@ -146,14 +146,7 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
         />
       </Flex>
       {tier.description ? (
-        <Text
-          mt="8px"
-          fontSize="11px"
-          fontWeight="400"
-          lineHeight="1.25"
-          color={mutedTextColor}
-          whiteSpace="pre-wrap"
-        >
+        <Text mt="8px" color={mutedTextColor} {...ticketDescriptionTextProps}>
           {hasReadMore && !isDescriptionExpanded
             ? displayDescription.replace(READ_MORE_SUFFIX, '')
             : displayDescription}
@@ -167,10 +160,12 @@ export function TicketCard({ tier, quantity, onQuantityChange }: TicketCardProps
                 border="none"
                 p={0}
                 color="text.primary"
-                fontSize="11px"
+                fontSize="12px"
                 fontWeight="400"
+                lineHeight="1.5"
                 cursor="pointer"
                 textDecoration="underline"
+                textUnderlineOffset="2px"
                 onClick={() => setIsDescriptionExpanded((prev) => !prev)}
                 aria-expanded={isDescriptionExpanded}
               >

@@ -23,6 +23,32 @@ export interface Artist {
   socials?: ArtistSocials
 }
 
+export interface EventInfoLink {
+  label: string
+  href: string
+}
+
+export interface EventInfoSubsection {
+  title: string
+  body: string
+}
+
+export interface EventInfoSection {
+  title: string
+  intro?: string
+  bullets?: string[]
+  subsections?: EventInfoSubsection[]
+}
+
+export interface EventInfo {
+  headline: string
+  venueAndDate: string
+  schedule: string
+  links: EventInfoLink[]
+  sections: EventInfoSection[]
+  policy: string
+}
+
 export interface Event {
   id: string
   title: string
@@ -35,7 +61,8 @@ export interface Event {
   timeRange: string
   venue: string
   city: string
-  description: string
+  ageRestriction: string
+  eventInfo: EventInfo
   ticketTiers: TicketTier[]
   artists: Artist[]
 }

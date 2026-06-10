@@ -29,7 +29,7 @@ export function KydAccordionSection({
   const accordionValue = previewMode || open ? [itemValue] : []
 
   return (
-    <Box w="full" px="pageX" borderTopWidth="1px" borderTopColor="border.subtle">
+    <Box w="full" borderTopWidth="1px" borderTopColor="border.subtle">
       <Accordion.Root
         value={accordionValue}
         onValueChange={(nextValue) => {

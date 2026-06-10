@@ -1,25 +1,43 @@
 import { Box, Text } from '@chakra-ui/react'
 import { Tabs } from '@base-ui/react/tabs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { mockEvent } from '../../data/mock-event'
+import { useTicketPrototype } from '../../context/ticket-prototype-context'
 import { AnimatedPresencePanel } from '../ui/animated-presence-panel'
 import { TicketList } from './ticket-list'
 import { TicketsResaleTabs } from './tickets-resale-tabs'
+import { TicketsSimpleHeader } from './tickets-simple-header'
 
 type TicketTab = 'tickets' | 'resale'
 
+const ticketSectionSurfaceProps = {
+  position: 'relative' as const,
+  w: 'full',
+  borderRadius: 'ticketSection',
+  overflow: 'hidden',
+  className: 't-ticket-section',
+}
+
 export function TicketsSection() {
+  const { isResaleEnabled } = useTicketPrototype()
   const [activeTab, setActiveTab] = useState<TicketTab>('tickets')
+
+  useEffect(() => {
+    if (!isResaleEnabled && activeTab === 'resale') setActiveTab('tickets')
+  }, [isResaleEnabled, activeTab])
+
+  if (!isResaleEnabled) {
+    return (
+      <Box {...ticketSectionSurfaceProps}>
+        <TicketsSimpleHeader ageRestriction={mockEvent.ageRestriction} />
+        <TicketList tiers={mockEvent.ticketTiers} />
+      </Box>
+    )
+  }
 
   return (
     <Tabs.Root value={activeTab} onValueChange={(value) => setActiveTab(value as TicketTab)}>
-      <Box
-        position="relative"
-        w="full"
-        borderRadius="8px"
-        overflow="hidden"
-        boxShadow="inset 0 0 0 1px rgba(204,237,255,0.2)"
-      >
+      <Box {...ticketSectionSurfaceProps}>
         <TicketsResaleTabs activeTab={activeTab} />
 
         <AnimatedPresencePanel panelKey={activeTab}>

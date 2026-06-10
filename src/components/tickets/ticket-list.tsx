@@ -16,7 +16,7 @@ export function TicketList({ tiers }: TicketListProps) {
   const soldOutTiers = tiers.filter((tier) => tier.status === 'sold_out')
 
   return (
-    <VStack gap="12px" w="full" px="pageX" pt="12px">
+    <VStack gap="12px" w="full" px="pageX" py="12px">
       {activeTiers.map((tier) => (
         <TicketCard
           key={tier.id}

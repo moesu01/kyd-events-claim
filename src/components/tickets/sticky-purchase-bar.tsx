@@ -1,27 +1,39 @@
 import { Box } from '@chakra-ui/react'
+import type { RefObject } from 'react'
 import { useTicketCart } from '../../context/ticket-cart-context'
 import { PurchaseButton } from './purchase-button'
 
-export function StickyPurchaseBar() {
+interface StickyPurchaseBarProps {
+  ticketsSectionRef: RefObject<HTMLElement | null>
+}
+
+export function StickyPurchaseBar({ ticketsSectionRef }: StickyPurchaseBarProps) {
   const { totalTickets } = useTicketCart()
 
-  if (totalTickets === 0) return null
+  const handlePurchase = () => {
+    if (totalTickets === 0) {
+      ticketsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+    console.log('checkout')
+  }
 
   return (
     <Box
       position="fixed"
       bottom="0"
-      left="50%"
-      transform="translateX(-50%)"
+      left="0"
+      right="0"
       w="full"
-      maxW="mobile"
-      bg="bg.page"
-      py="17px"
-      px="pageX"
+      pt="32px"
+      pb="17px"
       zIndex={10}
-      boxShadow="0 -4px 12px rgba(0,0,0,0.25)"
+      pointerEvents="none"
+      className="t-sticky-purchase-bar"
     >
-      <PurchaseButton ticketCount={totalTickets} />
+      <Box maxW="mobile" mx="auto" w="full" px="pageX" pointerEvents="auto">
+        <PurchaseButton ticketCount={totalTickets} onPurchase={handlePurchase} />
+      </Box>
     </Box>
   )
 }

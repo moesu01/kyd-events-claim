@@ -1,5 +1,5 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { EventInfoAccordion } from '../components/accordions/event-info-accordion'
 import { LineUpAccordion } from '../components/accordions/lineup-accordion'
 import { EventMetaRows } from '../components/event/event-meta-rows'
@@ -17,6 +17,7 @@ import { useImageAccentColor } from '../lib/use-image-accent-color'
 
 export function EventPage() {
   const { totalTickets } = useTicketCart()
+  const ticketsSectionRef = useRef<HTMLDivElement>(null)
   const posterUrls = mockEvent.posterUrls ?? [mockEvent.posterUrl]
   const [activePosterIndex, setActivePosterIndex] = useState(0)
   const activePosterUrl = posterUrls[activePosterIndex] ?? mockEvent.posterUrl
@@ -30,60 +31,65 @@ export function EventPage() {
 
   return (
     <EventAccentProvider accentColor={accentColor}>
-      <Box
-        color="text.primary"
-        minH="100vh"
-        maxW="mobile"
-        mx="auto"
-        w="full"
-        position="relative"
-        css={{
-          WebkitFontSmoothing: 'antialiased',
-          MozOsxFontSmoothing: 'grayscale',
-        }}
-      >
-      <AppHeader ticketCount={totalTickets} />
+      <Box minH="100vh" w="full" position="relative">
+        <Box
+          color="text.primary"
+          maxW="mobile"
+          mx="auto"
+          w="full"
+          css={{
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+          }}
+        >
+          <AppHeader ticketCount={totalTickets} />
 
-      <Box as="main" w="full">
-        <VStack gap={0} align="stretch" w="full" pt="8px" pb={totalTickets > 0 ? '100px' : undefined}>
-          <EventPoster
-            posterUrl={activePosterUrl}
-            activeSlide={activePosterIndex}
-            totalSlides={posterUrls.length}
-            onAdvance={handleAdvancePoster}
-          />
+          <Box as="main" w="full">
+            <VStack gap={0} align="stretch" w="full" pt="8px" pb="116px">
+              <EventPoster
+                posterUrl={activePosterUrl}
+                activeSlide={activePosterIndex}
+                totalSlides={posterUrls.length}
+                onAdvance={handleAdvancePoster}
+              />
 
-          <Box pt="18px">
-            <EventTitleBlock
-              title={mockEvent.title}
-              subtitle={mockEvent.subtitle}
-              presenter={mockEvent.presenter}
-            />
+              <Box pt="18px">
+                <EventTitleBlock
+                  title={mockEvent.title}
+                  subtitle={mockEvent.subtitle}
+                  presenter={mockEvent.presenter}
+                />
+              </Box>
+
+              <EventMetaRows
+                date={mockEvent.date}
+                timeRange={mockEvent.timeRange}
+                venue={mockEvent.venue}
+                city={mockEvent.city}
+              />
+
+              <Box
+                ref={ticketsSectionRef}
+                pt="12px"
+                w="full"
+                css={{ scrollMarginBottom: '116px' }}
+              >
+                <TicketsSection />
+              </Box>
+
+              <Box mt="10px" w="full">
+                <EventInfoAccordion eventInfo={mockEvent.eventInfo} />
+                <LineUpAccordion artists={mockEvent.artists} />
+              </Box>
+
+              <Box pt="20px" w="full">
+                <SiteFooter />
+              </Box>
+            </VStack>
           </Box>
+        </Box>
 
-          <EventMetaRows
-            date={mockEvent.date}
-            timeRange={mockEvent.timeRange}
-            venue={mockEvent.venue}
-            city={mockEvent.city}
-          />
-
-          <Box pt="12px" w="full">
-            <TicketsSection />
-          </Box>
-
-          <Box mt="10px" w="full">
-            <EventInfoAccordion description={mockEvent.description} />
-            <LineUpAccordion artists={mockEvent.artists} />
-          </Box>
-
-          <Box pt="20px" w="full">
-            <SiteFooter />
-          </Box>
-        </VStack>
-      </Box>
-
-      <StickyPurchaseBar />
+        <StickyPurchaseBar ticketsSectionRef={ticketsSectionRef} />
       </Box>
     </EventAccentProvider>
   )
