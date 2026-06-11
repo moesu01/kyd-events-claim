@@ -7,9 +7,10 @@ import { TicketCard } from './ticket-card'
 
 interface TicketListProps {
   tiers: TicketTier[]
+  showPromoLink?: boolean
 }
 
-export function TicketList({ tiers }: TicketListProps) {
+export function TicketList({ tiers, showPromoLink = true }: TicketListProps) {
   const { quantities, setQuantity } = useTicketCart()
 
   const activeTiers = tiers.filter((tier) => tier.status !== 'sold_out')
@@ -39,7 +40,7 @@ export function TicketList({ tiers }: TicketListProps) {
         </VStack>
       ) : null}
 
-      <PromoCodeLink />
+      {showPromoLink ? <PromoCodeLink /> : null}
     </VStack>
   )
 }

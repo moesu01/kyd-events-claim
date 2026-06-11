@@ -4,9 +4,11 @@ const PromoButton = chakra('button')
 
 interface PromoCodeLinkProps {
   onClick?: () => void
+  variant?: 'stacked' | 'inline'
 }
 
-export function PromoCodeLink({ onClick }: PromoCodeLinkProps) {
+export function PromoCodeLink({ onClick, variant = 'stacked' }: PromoCodeLinkProps) {
+  const isInline = variant === 'inline'
   const handleClick = () => {
     if (onClick) {
       onClick()
@@ -18,22 +20,25 @@ export function PromoCodeLink({ onClick }: PromoCodeLinkProps) {
   return (
     <PromoButton
       type="button"
-      w="full"
-      py="8px"
+      w={isInline ? 'auto' : 'full'}
+      py={isInline ? '0' : '8px'}
       bg="transparent"
       border="none"
       cursor="pointer"
+      flexShrink={0}
       onClick={handleClick}
       aria-label="Enter promo code"
     >
       <Text
-        fontSize="14px"
+        fontSize={isInline ? '13px' : '14px'}
         fontWeight="400"
-        lineHeight="1.3"
+        lineHeight="1"
+        letterSpacing={isInline ? '-0.13px' : undefined}
         color="text.primary"
-        textAlign="center"
+        textAlign={isInline ? 'right' : 'center'}
         textDecoration="underline"
         textUnderlineOffset="2px"
+        whiteSpace="nowrap"
       >
         Got a code?
       </Text>

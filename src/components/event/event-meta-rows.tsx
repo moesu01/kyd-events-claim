@@ -1,10 +1,12 @@
 import { CalendarDots, MapPinSimpleArea } from '@phosphor-icons/react'
 import { Box, Flex, Separator, Text, VStack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
+import { formatEventDateTimeLabel } from '../../lib/format'
 
 interface EventMetaRowsProps {
   date: string
-  timeRange: string
+  showTime: string
+  ageRestriction: string
   venue: string
   city: string
 }
@@ -13,9 +15,15 @@ interface MetaRowProps {
   icon: ReactNode
   leftText: string
   rightText: string
+  rightTextColor?: string
 }
 
-function MetaRow({ icon, leftText, rightText }: MetaRowProps) {
+function MetaRow({
+  icon,
+  leftText,
+  rightText,
+  rightTextColor = 'rgba(255,255,255,0.75)',
+}: MetaRowProps) {
   return (
     <Flex align="center" gap="8px" w="full" px="8px" py="4px" borderRadius="10px">
       <Box display="flex" flexShrink={0}>
@@ -37,7 +45,7 @@ function MetaRow({ icon, leftText, rightText }: MetaRowProps) {
           fontWeight="400"
           lineHeight="1"
           letterSpacing="-0.13px"
-          color="rgba(255,255,255,0.75)"
+          color={rightTextColor}
           flexShrink={0}
           whiteSpace="nowrap"
         >
@@ -48,7 +56,13 @@ function MetaRow({ icon, leftText, rightText }: MetaRowProps) {
   )
 }
 
-export function EventMetaRows({ date, timeRange, venue, city }: EventMetaRowsProps) {
+export function EventMetaRows({
+  date,
+  showTime,
+  ageRestriction,
+  venue,
+  city,
+}: EventMetaRowsProps) {
   const iconProps = {
     size: 14,
     color: 'currentColor',
@@ -61,8 +75,9 @@ export function EventMetaRows({ date, timeRange, venue, city }: EventMetaRowsPro
 
       <MetaRow
         icon={<CalendarDots {...iconProps} aria-hidden />}
-        leftText={date}
-        rightText={timeRange}
+        leftText={formatEventDateTimeLabel(date, showTime)}
+        rightText={`Ages: ${ageRestriction}`}
+        rightTextColor="text.primary"
       />
 
       <Separator orientation="horizontal" borderColor="border.subtle" w="full" />

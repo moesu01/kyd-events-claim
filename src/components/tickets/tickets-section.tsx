@@ -29,8 +29,8 @@ export function TicketsSection() {
   if (!isResaleEnabled) {
     return (
       <Box {...ticketSectionSurfaceProps}>
-        <TicketsSimpleHeader ageRestriction={mockEvent.ageRestriction} />
-        <TicketList tiers={mockEvent.ticketTiers} />
+        <TicketsSimpleHeader />
+        <TicketList tiers={mockEvent.ticketTiers} showPromoLink={false} />
       </Box>
     )
   }

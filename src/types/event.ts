@@ -58,6 +58,7 @@ export interface Event {
   posterUrls?: string[]
   accentColor?: string
   date: string
+  showTime: string
   timeRange: string
   venue: string
   city: string

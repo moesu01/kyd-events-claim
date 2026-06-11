@@ -13,6 +13,7 @@ export const mockEvent: Event = {
     assetUrl('/assets/poster-labiahead.png'),
   ],
   date: 'Tuesday, June 7',
+  showTime: '7:00PM',
   timeRange: '6:30PM - 9:30PM',
   venue: 'The Cathedral of St. John the Divine',
   city: 'New York, NY',
@@ -94,7 +95,7 @@ export const mockEvent: Event = {
     {
       id: 'honey-revenge',
       name: 'Honey Revenge',
-      imageUrl: assetUrl('/assets/artists/honey-revenge.jpg'),
+      imageUrl: assetUrl('/assets/artists/honey-revenge.png'),
       setTime: '10:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -105,7 +106,7 @@ export const mockEvent: Event = {
     {
       id: 'daisy-grenade',
       name: 'Daisy Grenade',
-      imageUrl: assetUrl('/assets/artists/daisy-grenade.jpg'),
+      imageUrl: assetUrl('/assets/artists/daisy-grenade.png'),
       setTime: '9:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -116,7 +117,7 @@ export const mockEvent: Event = {
     {
       id: 'vana',
       name: 'Vana',
-      imageUrl: assetUrl('/assets/artists/vana.jpg'),
+      imageUrl: assetUrl('/assets/artists/vana.png'),
       setTime: '8:00PM',
       socials: {
         instagram: 'https://instagram.com',
@@ -127,19 +128,8 @@ export const mockEvent: Event = {
     {
       id: 'nightlife',
       name: 'nightlife',
-      imageUrl: assetUrl('/assets/artists/nightlife.jpg'),
+      imageUrl: assetUrl('/assets/artists/nightlife.png'),
       setTime: '7:00PM',
-      socials: {
-        instagram: 'https://instagram.com',
-        spotify: 'https://spotify.com',
-        tiktok: 'https://tiktok.com',
-      },
-    },
-    {
-      id: 'laser-girl-420',
-      name: 'Laser girl 420',
-      imageUrl: assetUrl('/assets/artists/laser-girl-420.jpg'),
-      setTime: '11:00PM',
       socials: {
         instagram: 'https://instagram.com',
         spotify: 'https://spotify.com',

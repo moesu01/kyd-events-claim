@@ -1,9 +1,6 @@
 import { Ticket } from '@phosphor-icons/react'
 import { Box, Flex, Text } from '@chakra-ui/react'
-
-interface TicketsSimpleHeaderProps {
-  ageRestriction: string
-}
+import { PromoCodeLink } from './promo-code-link'
 
 const iconProps = {
   size: 18,
@@ -11,7 +8,7 @@ const iconProps = {
   weight: 'regular' as const,
 }
 
-export function TicketsSimpleHeader({ ageRestriction }: TicketsSimpleHeaderProps) {
+export function TicketsSimpleHeader() {
   return (
     <Flex
       align="center"
@@ -29,16 +26,7 @@ export function TicketsSimpleHeader({ ageRestriction }: TicketsSimpleHeaderProps
           Tickets
         </Text>
       </Flex>
-      <Text
-        fontSize="12px"
-        fontWeight="500"
-        lineHeight="1.3"
-        color="text.secondary"
-        flexShrink={0}
-        whiteSpace="nowrap"
-      >
-        Ages: {ageRestriction}
-      </Text>
+      <PromoCodeLink variant="inline" />
     </Flex>
   )
 }

@@ -16,9 +16,11 @@ const FOOTER_LINKS = [
   'Help',
 ] as const
 
+const KYD_LABS_LOGO_URL = assetUrl('/assets/kyd-logo-white.png')
+
 export function SiteFooter({
   version = 'v2.0.6',
-  logoUrl = assetUrl('/assets/kyd-labs-logo.png'),
+  logoUrl = KYD_LABS_LOGO_URL,
 }: SiteFooterProps) {
   const [hasLogoError, setHasLogoError] = useState(false)
 
@@ -55,8 +57,8 @@ export function SiteFooter({
         <Image
           src={logoUrl}
           alt="KYD Labs"
-          w="75px"
-          h="37px"
+          w="72px"
+          h="auto"
           objectFit="contain"
           onError={() => setHasLogoError(true)}
         />

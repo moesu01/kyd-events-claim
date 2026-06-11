@@ -12,7 +12,7 @@ interface EventInfoAccordionProps {
 
 const ITEM_VALUE = 'event-info'
 
-const TEXT_FONT_SIZE_PX = 12
+const TEXT_FONT_SIZE_PX = 14
 const TEXT_LINE_HEIGHT = 1.5
 const PREVIEW_LINES = 3
 const COLLAPSED_HEIGHT = TEXT_FONT_SIZE_PX * TEXT_LINE_HEIGHT * PREVIEW_LINES

@@ -58,8 +58,8 @@ export function LineupArtistRow({ artist }: LineupArtistRowProps) {
       <Flex
         align="center"
         justify="center"
-        w="44px"
-        h="44px"
+        w="54px"
+        h="54px"
         borderRadius="pill"
         overflow="hidden"
         flexShrink={0}

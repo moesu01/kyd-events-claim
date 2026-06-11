@@ -63,7 +63,8 @@ export function EventPage() {
 
               <EventMetaRows
                 date={mockEvent.date}
-                timeRange={mockEvent.timeRange}
+                showTime={mockEvent.showTime}
+                ageRestriction={mockEvent.ageRestriction}
                 venue={mockEvent.venue}
                 city={mockEvent.city}
               />

@@ -6,7 +6,7 @@ interface LineupCollapsedProps {
   artists: Artist[]
 }
 
-const AVATAR_SIZE = '44px'
+const AVATAR_SIZE = '54px'
 const AVATAR_OVERLAP = '-16px'
 
 const PLACEHOLDER_COLORS = ['#6366f1', '#ec4899', '#14b8a6', '#f59e0b', '#8b5cf6']
@@ -65,13 +65,20 @@ export function LineupCollapsed({ artists }: LineupCollapsedProps) {
   const names = artists.map((artist) => artist.name).join(', ')
 
   return (
-    <Flex direction="column" gap="12px" w="full">
-      <Flex align="center" w="full">
+    <Flex align="center" w="full" gap="12px">
+      <Flex align="center" flexShrink={0}>
         {artists.map((artist, index) => (
           <CollapsedAvatar key={artist.id} artist={artist} index={index} />
         ))}
       </Flex>
-      <Text fontSize="12px" fontWeight="400" lineHeight="1.5" color="text.secondary">
+      <Text
+        flex={1}
+        minW={0}
+        fontSize="14px"
+        fontWeight="400"
+        lineHeight="1.3"
+        color="text.primary"
+      >
         {names}
       </Text>
     </Flex>

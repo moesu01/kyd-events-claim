@@ -18,7 +18,7 @@ const config = defineConfig({
         pageX: { value: '12px' },
       },
       sizes: {
-        mobile: { value: '375px' },
+        mobile: { value: '430px' },
       },
     },
     semanticTokens: {

@@ -4,7 +4,7 @@ import type { EventInfo, EventInfoLink, EventInfoSection } from '../../types/eve
 const InfoLink = chakra('a')
 
 const bodyTextProps = {
-  fontSize: '12px',
+  fontSize: '14px',
   fontWeight: '400',
   lineHeight: '1.5',
   color: 'text.secondary',
@@ -12,14 +12,14 @@ const bodyTextProps = {
 } as const
 
 const sectionTitleProps = {
-  fontSize: '12px',
+  fontSize: '14px',
   fontWeight: '700',
   lineHeight: '1.4',
   color: 'text.primary',
 } as const
 
 const subsectionTitleProps = {
-  fontSize: '12px',
+  fontSize: '14px',
   fontWeight: '600',
   lineHeight: '1.4',
   color: 'text.primary',
@@ -72,7 +72,7 @@ function EventInfoSummary({ headline, venueAndDate, schedule }: EventInfoSummary
   return (
     <Box>
       <Text
-        fontSize="12px"
+        fontSize="14px"
         fontWeight="600"
         lineHeight="1.4"
         color="text.primary"
@@ -100,7 +100,7 @@ function EventInfoExternalLink({ link }: EventInfoExternalLinkProps) {
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      fontSize="12px"
+      fontSize="14px"
       fontWeight="500"
       lineHeight="1.5"
       color="text.primary"
