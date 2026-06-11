@@ -1,4 +1,5 @@
 import { Text, chakra } from '@chakra-ui/react'
+import { useEventAccent } from '../../context/event-accent-context'
 
 const PromoButton = chakra('button')
 
@@ -8,6 +9,7 @@ interface PromoCodeLinkProps {
 }
 
 export function PromoCodeLink({ onClick, variant = 'stacked' }: PromoCodeLinkProps) {
+  const { linkTextColor } = useEventAccent()
   const isInline = variant === 'inline'
   const handleClick = () => {
     if (onClick) {
@@ -34,7 +36,7 @@ export function PromoCodeLink({ onClick, variant = 'stacked' }: PromoCodeLinkPro
         fontWeight="400"
         lineHeight="1"
         letterSpacing={isInline ? '-0.13px' : undefined}
-        color="text.primary"
+        color={linkTextColor}
         textAlign={isInline ? 'right' : 'center'}
         textDecoration="underline"
         textUnderlineOffset="2px"

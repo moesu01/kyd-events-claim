@@ -3,7 +3,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { PromoCodeLink } from './promo-code-link'
 
 const iconProps = {
-  size: 18,
+  size: 14,
   color: 'currentColor',
   weight: 'regular' as const,
 }
@@ -18,7 +18,7 @@ export function TicketsSimpleHeader() {
       px="pageX"
       gap="12px"
     >
-      <Flex align="center" gap="6px" minW={0}>
+      <Flex align="center" gap="8px" minW={0}>
         <Box display="flex" flexShrink={0}>
           <Ticket {...iconProps} aria-hidden />
         </Box>

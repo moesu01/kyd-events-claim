@@ -1,6 +1,7 @@
 import { CalendarDots, MapPinSimpleArea } from '@phosphor-icons/react'
 import { Box, Flex, Separator, Text, VStack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
+import { useEventAccent } from '../../context/event-accent-context'
 import { formatEventDateTimeLabel } from '../../lib/format'
 
 interface EventMetaRowsProps {
@@ -22,10 +23,10 @@ function MetaRow({
   icon,
   leftText,
   rightText,
-  rightTextColor = 'rgba(255,255,255,0.75)',
+  rightTextColor,
 }: MetaRowProps) {
   return (
-    <Flex align="center" gap="8px" w="full" px="8px" py="4px" borderRadius="10px">
+    <Flex align="center" gap="8px" w="full" px="pageX" py="4px" borderRadius="10px">
       <Box display="flex" flexShrink={0}>
         {icon}
       </Box>
@@ -63,6 +64,7 @@ export function EventMetaRows({
   venue,
   city,
 }: EventMetaRowsProps) {
+  const { mutedTextColorLight } = useEventAccent()
   const iconProps = {
     size: 14,
     color: 'currentColor',
@@ -86,6 +88,7 @@ export function EventMetaRows({
         icon={<MapPinSimpleArea {...iconProps} aria-hidden />}
         leftText={venue}
         rightText={city}
+        rightTextColor={mutedTextColorLight}
       />
     </VStack>
   )

@@ -118,7 +118,13 @@ export function getAccentMutedTextColor(accentColor: string): string {
 export function getAccentMutedTextColorLight(accentColor: string): string {
   const hue = parseOklch(accentColor)?.h ?? 268
 
-  return formatOklch({ l: 0.869, c: 0.019, h: hue })
+  return formatOklch({ l: 0.75, c: 0.019, h: hue })
+}
+
+export function getAccentLinkTextColor(accentColor: string): string {
+  const hue = parseOklch(accentColor)?.h ?? 268
+
+  return formatOklch({ l: 0.82, c: 0.055, h: hue })
 }
 
 const CLAIM_INK = rgbToOklch({ r: 66, g: 62, b: 0 })

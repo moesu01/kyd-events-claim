@@ -37,6 +37,8 @@ export function SiteFooter({
       w="full"
       align="center"
       textAlign="center"
+      borderTopWidth="1px"
+      borderTopColor="border.subtle"
     >
       {hasLogoError ? (
         <Text

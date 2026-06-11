@@ -1,9 +1,14 @@
 import { InstagramLogo, SpotifyLogo, TiktokLogo } from '@phosphor-icons/react'
-import { Flex, Image, Text, chakra } from '@chakra-ui/react'
-import { useState, type MouseEvent, type ReactNode } from 'react'
+import { Box, Flex, Image, Text, chakra } from '@chakra-ui/react'
+import { useMemo, useState, type MouseEvent, type ReactNode } from 'react'
+import { useEventAccent } from '../../context/event-accent-context'
+import { getQuantitySelectorBg } from '../../lib/oklch-color'
 import type { Artist } from '../../types/event'
+import { ARTIST_AVATAR_BORDER_SHADOW } from './lineup-avatar-styles'
 
 const SocialLink = chakra('a')
+
+const SOCIAL_ICON_BORDER_SHADOW = '0 0 0 1px rgba(255, 255, 255, 0.1)'
 
 interface LineupArtistRowProps {
   artist: Artist
@@ -21,10 +26,12 @@ function getPlaceholderColor(id: string) {
 interface SocialIconButtonProps {
   href: string
   label: string
+  inactiveBg: string
+  activeBg: string
   children: ReactNode
 }
 
-function SocialIconButton({ href, label, children }: SocialIconButtonProps) {
+function SocialIconButton({ href, label, inactiveBg, activeBg, children }: SocialIconButtonProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.stopPropagation()
     window.open(href, '_blank', 'noopener,noreferrer')
@@ -40,8 +47,26 @@ function SocialIconButton({ href, label, children }: SocialIconButtonProps) {
       w="32px"
       h="32px"
       borderRadius="pill"
-      bg="bg.surface"
+      bg={inactiveBg}
+      color="text.primary"
+      boxShadow={SOCIAL_ICON_BORDER_SHADOW}
       flexShrink={0}
+      transitionProperty="background-color"
+      transitionDuration="150ms"
+      transitionTimingFunction="ease-out"
+      _hover={{ bg: activeBg }}
+      _focusVisible={{ bg: activeBg, outline: '2px solid', outlineColor: 'text.primary', outlineOffset: '2px' }}
+      css={{
+        '& svg': {
+          opacity: 0.75,
+          transitionProperty: 'opacity',
+          transitionDuration: '150ms',
+          transitionTimingFunction: 'ease-out',
+        },
+        '&:hover svg, &:focus-visible svg': {
+          opacity: 1,
+        },
+      }}
       onClick={handleClick}
     >
       {children}
@@ -51,29 +76,50 @@ function SocialIconButton({ href, label, children }: SocialIconButtonProps) {
 
 export function LineupArtistRow({ artist }: LineupArtistRowProps) {
   const [hasError, setHasError] = useState(false)
+  const { accentColor } = useEventAccent()
   const { socials } = artist
+  const socialIconInactiveBg = useMemo(
+    () => getQuantitySelectorBg(accentColor, false),
+    [accentColor],
+  )
+  const socialIconActiveBg = useMemo(
+    () => getQuantitySelectorBg(accentColor, true),
+    [accentColor],
+  )
 
   return (
-    <Flex align="center" gap="12px" w="full" minH="52px" py="6px">
+    <Flex align="center" gap="12px" w="full" minH="52px" py="10px">
       <Flex
         align="center"
         justify="center"
-        w="54px"
-        h="54px"
+        position="relative"
+        w="60px"
+        h="60px"
         borderRadius="pill"
         overflow="hidden"
+        boxShadow={hasError ? ARTIST_AVATAR_BORDER_SHADOW : undefined}
         flexShrink={0}
         bg={hasError ? getPlaceholderColor(artist.id) : undefined}
       >
         {!hasError ? (
-          <Image
-            src={artist.imageUrl}
-            alt=""
-            w="full"
-            h="full"
-            objectFit="cover"
-            onError={() => setHasError(true)}
-          />
+          <>
+            <Image
+              src={artist.imageUrl}
+              alt=""
+              w="full"
+              h="full"
+              objectFit="cover"
+              onError={() => setHasError(true)}
+            />
+            <Box
+              position="absolute"
+              inset={0}
+              borderRadius="pill"
+              pointerEvents="none"
+              boxShadow={ARTIST_AVATAR_BORDER_SHADOW}
+              aria-hidden
+            />
+          </>
         ) : (
           <Text fontSize="18px" fontWeight="700" lineHeight="1" color="text.primary">
             {artist.name.charAt(0).toUpperCase()}
@@ -87,17 +133,32 @@ export function LineupArtistRow({ artist }: LineupArtistRowProps) {
         </Text>
         <Flex align="center" gap="8px">
           {socials?.instagram ? (
-            <SocialIconButton href={socials.instagram} label={`${artist.name} on Instagram`}>
+            <SocialIconButton
+              href={socials.instagram}
+              label={`${artist.name} on Instagram`}
+              inactiveBg={socialIconInactiveBg}
+              activeBg={socialIconActiveBg}
+            >
               <InstagramLogo size={16} weight="fill" aria-hidden />
             </SocialIconButton>
           ) : null}
           {socials?.spotify ? (
-            <SocialIconButton href={socials.spotify} label={`${artist.name} on Spotify`}>
+            <SocialIconButton
+              href={socials.spotify}
+              label={`${artist.name} on Spotify`}
+              inactiveBg={socialIconInactiveBg}
+              activeBg={socialIconActiveBg}
+            >
               <SpotifyLogo size={16} weight="fill" aria-hidden />
             </SocialIconButton>
           ) : null}
           {socials?.tiktok ? (
-            <SocialIconButton href={socials.tiktok} label={`${artist.name} on TikTok`}>
+            <SocialIconButton
+              href={socials.tiktok}
+              label={`${artist.name} on TikTok`}
+              inactiveBg={socialIconInactiveBg}
+              activeBg={socialIconActiveBg}
+            >
               <TiktokLogo size={16} weight="fill" aria-hidden />
             </SocialIconButton>
           ) : null}
@@ -106,7 +167,7 @@ export function LineupArtistRow({ artist }: LineupArtistRowProps) {
 
       {artist.setTime ? (
         <Text
-          fontSize="12px"
+          fontSize="14px"
           fontWeight="400"
           lineHeight="1.3"
           color="text.primary"

@@ -8,7 +8,7 @@ interface SoldOutRowProps {
 }
 
 export function SoldOutRow({ name, isFirst, isLast }: SoldOutRowProps) {
-  const { mutedTextColor, mutedTextColorLight } = useEventAccent()
+  const { mutedTextColorLight } = useEventAccent()
 
   return (
     <Box
@@ -32,7 +32,7 @@ export function SoldOutRow({ name, isFirst, isLast }: SoldOutRowProps) {
         <Text fontSize="16px" fontWeight="500" lineHeight="24px" color={mutedTextColorLight}>
           {name}
         </Text>
-        <Text fontSize="16px" fontWeight="500" lineHeight="24px" color={mutedTextColor}>
+        <Text fontSize="16px" fontWeight="500" lineHeight="24px" color={mutedTextColorLight}>
           Sold Out
         </Text>
       </Flex>

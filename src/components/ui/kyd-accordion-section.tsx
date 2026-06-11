@@ -50,6 +50,7 @@ export function KydAccordionSection({
                   display="flex"
                   alignItems="center"
                   w="full"
+                  px="pageX"
                   py="13px"
                   bg="transparent"
                   border="none"
@@ -84,9 +85,11 @@ export function KydAccordionSection({
             keepMounted={keepMounted}
             hiddenUntilFound={false}
             render={(props) => (
-              <div
+              <chakra.div
                 {...props}
-                style={{ paddingBottom: '13px', ...props.style }}
+                px="pageX"
+                pb="13px"
+                style={{ ...props.style }}
                 className={mergeClassNames(
                   previewMode ? undefined : 'kyd-accordion-panel t-resize',
                   props.className,

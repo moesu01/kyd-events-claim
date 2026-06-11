@@ -1,6 +1,7 @@
-import { Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import type { Artist } from '../../types/event'
+import { ARTIST_AVATAR_BORDER_SHADOW } from './lineup-avatar-styles'
 
 interface LineupCollapsedProps {
   artists: Artist[]
@@ -36,6 +37,7 @@ function CollapsedAvatar({ artist, index }: CollapsedAvatarProps) {
       border="2px solid"
       borderColor="bg.page"
       bg={hasError ? getPlaceholderColor(artist.id) : undefined}
+      boxShadow={hasError ? ARTIST_AVATAR_BORDER_SHADOW : undefined}
       overflow="hidden"
       flexShrink={0}
       ml={index === 0 ? '0' : AVATAR_OVERLAP}
@@ -44,14 +46,24 @@ function CollapsedAvatar({ artist, index }: CollapsedAvatarProps) {
       aria-hidden
     >
       {!hasError ? (
-        <Image
-          src={artist.imageUrl}
-          alt=""
-          w="full"
-          h="full"
-          objectFit="cover"
-          onError={() => setHasError(true)}
-        />
+        <>
+          <Image
+            src={artist.imageUrl}
+            alt=""
+            w="full"
+            h="full"
+            objectFit="cover"
+            onError={() => setHasError(true)}
+          />
+          <Box
+            position="absolute"
+            inset={0}
+            borderRadius="pill"
+            pointerEvents="none"
+            boxShadow={ARTIST_AVATAR_BORDER_SHADOW}
+            aria-hidden
+          />
+        </>
       ) : (
         <Text fontSize="18px" fontWeight="700" lineHeight="1" color="text.primary">
           {artist.name.charAt(0).toUpperCase()}
@@ -66,11 +78,6 @@ export function LineupCollapsed({ artists }: LineupCollapsedProps) {
 
   return (
     <Flex align="center" w="full" gap="12px">
-      <Flex align="center" flexShrink={0}>
-        {artists.map((artist, index) => (
-          <CollapsedAvatar key={artist.id} artist={artist} index={index} />
-        ))}
-      </Flex>
       <Text
         flex={1}
         minW={0}
@@ -81,6 +88,11 @@ export function LineupCollapsed({ artists }: LineupCollapsedProps) {
       >
         {names}
       </Text>
+      <Flex align="center" flexShrink={0}>
+        {artists.map((artist, index) => (
+          <CollapsedAvatar key={artist.id} artist={artist} index={index} />
+        ))}
+      </Flex>
     </Flex>
   )
 }
